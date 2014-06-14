@@ -277,7 +277,7 @@ Switch to a predefined layout [as above](#layout-config)
 
 ## Bindings
 
-Mash is Cmd + Alt/Opt + Ctrl pressed together.
+Mash is <kbd>Cmd + Alt/Opt + Ctrl</kbd> pressed together.
 
     mash = [
       "cmd"
