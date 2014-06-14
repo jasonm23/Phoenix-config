@@ -6,6 +6,8 @@ This is a nice, fairly comprehensive, relatively self-documenting,
 configuration for [Phoenix.app](https://github.com/sdegutis/Phoenix),
 a lightweight scriptable OS X window manager.
 
+### [Jump straight to the bindings](#bindings)
+
 ## Usage
 
 Install Phoenix.app, and convert this file (`.phoenix.litcoffee`) to
@@ -55,10 +57,6 @@ by these defaults, the `EDITOR` gets preference.
             whereTo: "toLeftHalf"
           }
         ]
-
-### Shortcut
-
-[Jump straight to the bindings](#bindings)
 
 ## Methods
 
