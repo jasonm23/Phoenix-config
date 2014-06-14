@@ -6,7 +6,7 @@ This is a nice, fairly comprehensive, relatively self-documenting,
 configuration for [Phoenix.app](https://github.com/sdegutis/Phoenix),
 a lightweight scriptable OS X window manager.
 
-### Notes
+#### Development Notes / Todos
 
 A few methods / parameters need renaming to normalise semantics.
 
