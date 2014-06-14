@@ -30,8 +30,8 @@ plain JS, for use with Phoenix.app using:
 
 ## Layout config
 
-Helpful layouts, the last app in a layout will get focus
-by these defaults, the `EDITOR` gets preference.
+Helpful layouts, the last app in a layout will get focus.
+Using these defaults `EDITOR` gets preference.
 
     layouts =
       editorAndBrowser:
