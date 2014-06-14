@@ -56,6 +56,12 @@ by these defaults, the `EDITOR` gets preference.
           }
         ]
 
+### Shortcut
+
+[Jump straight to the bindings](#bindings)
+
+## Methods
+
 Snap all windows to grid layout
 
     snapAllToGrid = ->
