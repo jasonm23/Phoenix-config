@@ -140,35 +140,7 @@ Window to grid
       @setFrame rect
       this
 
-### Window sizing
-
-Temporary storage for frames
-
-    lastFrames = {}
-
-Set a window to full screen
-
-    Window::toFullScreen = ->
-      fullFrame = @calculateGrid(0, 0, 1, 1)
-      unless _.isEqual(@frame(), fullFrame)
-        @rememberFrame()
-        @toGrid 0, 0, 1, 1
-      else if lastFrames[this]
-        @setFrame lastFrames[this]
-        @forgetFrame()
-
-
-Remember and forget frames
-
-    Window::rememberFrame = -> lastFrames[this] = @frame()
-    Window::forgetFrame = -> delete lastFrames[this]
-
-Set a window to top / bottom / left / right
-
-    Window::toTopHalf = -> @toGrid 0, 0, 1, 0.5
-    Window::toBottomHalf = -> @toGrid 0, 0.5, 1, 0.5
-    Window::toLeftHalf = -> @toGrid 0, 0, 0.5, 1
-    Window::toRightHalf = -> @toGrid 0.5, 0, 0.5, 1
+### Applications
 
 Select the first window for an app
 
@@ -220,6 +192,35 @@ Run the given function `f` for an app with `title`
     forApp = (title, f) ->
       app = App.byTitle(title)
       _.each app.visibleWindows(), f  if app
+
+### Window moving and sizing
+
+Temporary storage for frames
+
+    lastFrames = {}
+
+Set a window to full screen
+
+    Window::toFullScreen = ->
+      fullFrame = @calculateGrid(0, 0, 1, 1)
+      unless _.isEqual(@frame(), fullFrame)
+        @rememberFrame()
+        @toGrid 0, 0, 1, 1
+      else if lastFrames[this]
+        @setFrame lastFrames[this]
+        @forgetFrame()
+
+Remember and forget frames
+
+    Window::rememberFrame = -> lastFrames[this] = @frame()
+    Window::forgetFrame = -> delete lastFrames[this]
+
+Set a window to top / bottom / left / right
+
+    Window::toTopHalf = -> @toGrid 0, 0, 1, 0.5
+    Window::toBottomHalf = -> @toGrid 0, 0.5, 1, 0.5
+    Window::toLeftHalf = -> @toGrid 0, 0, 0.5, 1
+    Window::toRightHalf = -> @toGrid 0.5, 0, 0.5, 1
 
 Move the current window to the next / previous screen
 
