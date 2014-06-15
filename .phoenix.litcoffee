@@ -285,6 +285,8 @@ Expand the current window's height to vertically fill the screen
       frame.h = 2
       win.setGrid frame, win.screen()
 
+### Manage layouts
+
 Switch to a predefined layout [as above](#layout-config)
 
     setupLayout = (name)->
