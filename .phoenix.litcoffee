@@ -6,11 +6,7 @@ This is a nice, fairly comprehensive, relatively self-documenting,
 configuration for [Phoenix.app](https://github.com/sdegutis/Phoenix),
 a lightweight scriptable OS X window manager.
 
-#### Development Notes / Todos
-
-A few methods / parameters need renaming to normalise semantics.
-
-### [Jump straight to the bindings](#bindings)
+## [Jump straight to the bindings](#bindings)
 
 ## Usage
 
@@ -18,12 +14,6 @@ Install Phoenix.app, and convert this file (`.phoenix.litcoffee`) to
 plain JS, for use with Phoenix.app using:
 
 `coffee --bare --literate --compile .phoenix.litcoffee`
-
-If you're feeling dangerous, you could just do: (as a single line!)
-
-`\curl -s https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/a45396a7ead4455e42c25555def88545bf7b5c70/.phoenix.litcoffee | coffee --stdio --bare --literate --compile > ~/.phoenix.js`
-
-But that'd be crazy, so maybe you shouldn't.
 
 ## Basic Settings
 
@@ -134,8 +124,6 @@ Snap the current window to the grid
 
 
 Calculate the grid based on the parameters, `x`, `y`, `width`, `height`, (returning an object `{x:,y:,width:,height:}`)
-
-**TODO**: normalize parameters and object keys to `x,y,w,h`
 
     Window::calculateGrid = (x, y, width, height) ->
       screen = @screen().frameWithoutDockOrMenu()
