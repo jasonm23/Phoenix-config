@@ -72,6 +72,8 @@ Using these defaults `EDITOR` gets preference.
 
 ## Methods
 
+### Grid
+
 Snap all windows to grid layout
 
     snapAllToGrid = ->
@@ -122,7 +124,6 @@ Snap the current window to the grid
     Window::snapToGrid = ->
       @setGrid @getGrid(), @screen()  if @isNormalWindow()
 
-
 Calculate the grid based on the parameters, `x`, `y`, `width`, `height`, (returning an object `{x:,y:,width:,height:}`)
 
     Window::calculateGrid = (x, y, width, height) ->
@@ -138,6 +139,8 @@ Window to grid
       rect = @calculateGrid(x, y, width, height)
       @setFrame rect
       this
+
+### Window sizing
 
 Temporary storage for frames
 
