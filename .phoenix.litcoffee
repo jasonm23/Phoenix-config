@@ -19,6 +19,12 @@ plain JS, for use with Phoenix.app using:
 
 `coffee --bare --literate --compile .phoenix.litcoffee`
 
+If you're feeling dangerous, you could just do:
+
+`\curl -s https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/a45396a7ead4455e42c25555def88545bf7b5c70/.phoenix.litcoffee | coffee --stdio --bare --literate --compile`
+
+But that'd be crazy, so don't.
+
 ## Basic Settings
 
     MARGIN_X    = 5
