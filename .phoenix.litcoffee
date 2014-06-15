@@ -62,6 +62,18 @@ Using these defaults `EDITOR` gets preference.
           }
         ]
 
+      terminalAndBrowser:
+        [
+          {
+            app: BROWSER
+            whereTo: "toRightHalf"
+          }
+          {
+            app: TERMINAL
+            whereTo: "toLeftHalf"
+          }
+        ]
+
 ## Methods
 
 Snap all windows to grid layout
