@@ -329,6 +329,7 @@ Switch layouts using the predefined [Layout config](#layout-config)
 
     api.bind "5",     mash, -> setupLayout "editorAndBrowser"
     api.bind "4",     mash, -> setupLayout "editorAndTerminal"
+    api.bind "3",     mash, -> setupLayout "terminalAndBrowser"
 
 Move window between screens
 
