@@ -13,7 +13,9 @@ a lightweight scriptable OS X window manager.
 Install Phoenix.app, and convert this file (`.phoenix.litcoffee`) to
 plain JS, for use with Phoenix.app using:
 
-`coffee --bare --literate --compile .phoenix.litcoffee`
+```shell
+coffee --bare --literate --compile .phoenix.litcoffee
+```
 
 ### Install CoffeeScript
 
@@ -21,7 +23,9 @@ If you don't have CoffeeScript installed, you'll need to [install
 node/npm](https://github.com/joyent/node/wiki/installation) (or use
 `brew install node --with-npm`) first, and then:
 
-`npm install -g coffee-script`
+```shell
+npm install -g coffee-script
+```
 
 ## Basic Settings
 
