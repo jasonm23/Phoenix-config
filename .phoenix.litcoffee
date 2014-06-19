@@ -17,8 +17,8 @@ plain JS, for use with Phoenix.app using:
 
 ## Basic Settings
 
-    MARGIN_X    = 5
-    MARGIN_Y    = 5
+    MARGIN_X    = 3
+    MARGIN_Y    = 3
     GRID_WIDTH  = 3
 
 ## Application config
@@ -27,6 +27,7 @@ plain JS, for use with Phoenix.app using:
     BROWSER     = "Google Chrome"
     TERMINAL    = "iTerm"
     MUSIC       = "iTunes"
+    FINDER      = "Finder"
 
 ## Layout config
 
@@ -61,11 +62,22 @@ Using these defaults `EDITOR` gets preference.
       terminalAndBrowser:
         [
           {
+            app: TERMINAL
+            whereTo: "toLeftHalf"
+          }
+          {
             app: BROWSER
             whereTo: "toRightHalf"
           }
+        ]
+      finderAndTerminal:
+        [
           {
             app: TERMINAL
+            whereTo: "toRightHalf"
+          }
+          {
+            app: FINDER
             whereTo: "toLeftHalf"
           }
         ]
@@ -295,68 +307,72 @@ Switch to a predefined layout [as above](#layout-config)
         app = App.byTitle config.app
         app.firstWindow()[config.whereTo]()
 
+### Binding alias 
+
+Alias `api.bind` as `key_binding`, 
+
+    key_binding = (key, modifier, fn)->
+      api.bind key, modifier, fn
+
 ## Bindings
 
-Mash is <kbd>Cmd + Alt/Opt + Ctrl</kbd> pressed together.
+Mash is **Cmd** + **Alt/Opt** + **Ctrl** pressed together.
 
-    mash = [
-      "cmd"
-      "alt"
-      "ctrl"
-    ]
+    mash = "cmd+alt+ctrl".split "+"
 
 Move the current window to the top / bottom / left / right half of the screen
 and fill it.
 
-    api.bind "up",    mash, -> Window.focusedWindow().toTopHalf()
-    api.bind "down",  mash, -> Window.focusedWindow().toBottomHalf()
-    api.bind "left",  mash, -> Window.focusedWindow().toLeftHalf()
-    api.bind "right", mash, -> Window.focusedWindow().toRightHalf()
+    key_binding "up",    mash, -> Window.focusedWindow().toTopHalf()
+    key_binding "down",  mash, -> Window.focusedWindow().toBottomHalf()
+    key_binding "left",  mash, -> Window.focusedWindow().toLeftHalf()
+    key_binding "right", mash, -> Window.focusedWindow().toRightHalf()
 
 Maximize the current window
 
-    api.bind "M",     mash, -> Window.focusedWindow().toFullScreen()
-
+    key_binding "M",     mash, -> Window.focusedWindow().toFullScreen()
 
 Switch to or lauch apps, as defined in the [Application config](#application-config)
 
-    api.bind "0",     mash, -> App.focusOrStart EDITOR
-    api.bind "9",     mash, -> App.focusOrStart TERMINAL
-    api.bind "8",     mash, -> App.focusOrStart BROWSER
-    api.bind "7",     mash, -> App.focusOrStart MUSIC
+    key_binding "0",     mash, -> App.focusOrStart EDITOR
+    key_binding "9",     mash, -> App.focusOrStart TERMINAL
+    key_binding "8",     mash, -> App.focusOrStart BROWSER
+    key_binding "7",     mash, -> App.focusOrStart MUSIC
+    key_binding "6",     mash, -> App.focusOrStart FINDER
 
 Switch layouts using the predefined [Layout config](#layout-config)
 
-    api.bind "5",     mash, -> setupLayout "editorAndBrowser"
-    api.bind "4",     mash, -> setupLayout "editorAndTerminal"
-    api.bind "3",     mash, -> setupLayout "terminalAndBrowser"
+    key_binding "5",     mash, -> setupLayout "editorAndBrowser"
+    key_binding "4",     mash, -> setupLayout "editorAndTerminal"
+    key_binding "3",     mash, -> setupLayout "terminalAndBrowser"
+    key_binding "2",     mash, -> setupLayout "finderAndTerminal"
 
 Move window between screens
 
-    api.bind "N",     mash, -> moveWindowToNextScreen()
-    api.bind "P",     mash, -> moveWindowToPreviousScreen()
+    key_binding "N",     mash, -> moveWindowToNextScreen()
+    key_binding "P",     mash, -> moveWindowToPreviousScreen()
 
 Setting the grid size
 
-    api.bind "=",     mash, -> changeGridWidth +1
-    api.bind "-",     mash, -> changeGridWidth -1
+    key_binding "=",     mash, -> changeGridWidth +1
+    key_binding "-",     mash, -> changeGridWidth -1
 
 Snap current window or all windows to the grid
 
-    api.bind ";",     mash, -> Window.focusedWindow().snapToGrid()
-    api.bind "'",     mash, -> Window.visibleWindows().map (win)-> win.snapToGrid()
+    key_binding ";",     mash, -> Window.focusedWindow().snapToGrid()
+    key_binding "'",     mash, -> Window.visibleWindows().map (win)-> win.snapToGrid()
 
 Move the current window around the grid
 
-    api.bind "H",     mash, -> moveWindowLeftOneColumn()
-    api.bind "K",     mash, -> windowToTopRow()
-    api.bind "J",     mash, -> windowToBottomRow()
-    api.bind "L",     mash, -> moveWindowRightOneColumn()
+    key_binding "H",     mash, -> moveWindowLeftOneColumn()
+    key_binding "K",     mash, -> windowToTopRow()
+    key_binding "J",     mash, -> windowToBottomRow()
+    key_binding "L",     mash, -> moveWindowRightOneColumn()
 
 Size the current window on the grid
 
-    api.bind "U",     mash, -> windowToFullHeight()
-    api.bind "I",     mash, -> windowShrinkOneGridColumn()
-    api.bind "O",     mash, -> windowGrowOneGridColumn()
+    key_binding "U",     mash, -> windowToFullHeight()
+    key_binding "I",     mash, -> windowShrinkOneGridColumn()
+    key_binding "O",     mash, -> windowGrowOneGridColumn()
 
 That's all folks.
