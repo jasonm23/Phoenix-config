@@ -35,52 +35,18 @@ A couple of helpful app layouts. **note:** The last app in a layout array will g
 Using these defaults `EDITOR` gets preference.
 
     layouts =
-      editorAndBrowser:
-        [
-          {
-            app: BROWSER
-            whereTo: "toRightHalf"
-          }
-          {
-            app: EDITOR
-            whereTo: "toLeftHalf"
-          }
-        ]
-
-      editorAndTerminal:
-        [
-          {
-            app: TERMINAL
-            whereTo: "toRightHalf"
-          }
-          {
-            app: EDITOR
-            whereTo: "toLeftHalf"
-          }
-        ]
-
-      terminalAndBrowser:
-        [
-          {
-            app: TERMINAL
-            whereTo: "toLeftHalf"
-          }
-          {
-            app: BROWSER
-            whereTo: "toRightHalf"
-          }
-        ]
-      finderAndTerminal:
-        [
-          {
-            app: TERMINAL
-            whereTo: "toRightHalf"
-          }
-          {
-            app: FINDER
-            whereTo: "toLeftHalf"
-          }
-        ]
+      editorAndBrowser: [
+          {app: BROWSER,   whereTo: "toRightHalf"},
+          {app: EDITOR,    whereTo: "toLeftHalf" }]
+      editorAndTerminal: [
+          {app: TERMINAL,  whereTo: "toRightHalf"},
+          {app: EDITOR,    whereTo: "toLeftHalf" }]
+      terminalAndBrowser: [
+          {app: TERMINAL,  whereTo: "toLeftHalf" },
+          {app: BROWSER,   whereTo: "toRightHalf"}]
+      finderAndTerminal: [
+          {app: TERMINAL,  whereTo: "toRightHalf"},
+          {app: FINDER,    whereTo: "toLeftHalf" }]
 
 ## Methods
 
@@ -301,7 +267,7 @@ Expand the current window's height to vertically fill the screen
 
 Switch to a predefined layout [as above](#layout-config)
 
-    setupLayout = (name)->
+    switchLayout = (name)->
       _.each layouts[name], (config)->
         App.focusOrStart config.app
         app = App.byTitle config.app
@@ -342,10 +308,10 @@ Switch to or lauch apps, as defined in the [Application config](#application-con
 
 Switch layouts using the predefined [Layout config](#layout-config)
 
-    key_binding "5",     mash, -> setupLayout "editorAndBrowser"
-    key_binding "4",     mash, -> setupLayout "editorAndTerminal"
-    key_binding "3",     mash, -> setupLayout "terminalAndBrowser"
-    key_binding "2",     mash, -> setupLayout "finderAndTerminal"
+    key_binding "5",     mash, -> switchLayout "editorAndBrowser"
+    key_binding "4",     mash, -> switchLayout "editorAndTerminal"
+    key_binding "3",     mash, -> switchLayout "terminalAndBrowser"
+    key_binding "2",     mash, -> switchLayout "finderAndTerminal"
 
 Move window between screens
 
