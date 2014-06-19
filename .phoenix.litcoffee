@@ -15,6 +15,14 @@ plain JS, for use with Phoenix.app using:
 
 `coffee --bare --literate --compile .phoenix.litcoffee`
 
+### Install CoffeeScript
+
+If you don't have CoffeeScript installed, you'll need to [install
+node/npm](https://github.com/joyent/node/wiki/installation) (or use
+`brew install node --with-npm`) first, and then:
+
+`npm install -g coffee-script`
+
 ## Basic Settings
 
     MARGIN_X    = 3
