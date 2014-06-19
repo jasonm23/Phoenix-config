@@ -35,16 +35,16 @@ A couple of helpful app layouts. **note:** The last app in a layout array will g
 Using these defaults `EDITOR` gets preference.
 
     layouts =
-      editorAndBrowser: [
+      "Editor and Browser": [
           {app: BROWSER,   whereTo: "toRightHalf"},
           {app: EDITOR,    whereTo: "toLeftHalf" }]
-      editorAndTerminal: [
+      "Editor and Terminal": [
           {app: TERMINAL,  whereTo: "toRightHalf"},
           {app: EDITOR,    whereTo: "toLeftHalf" }]
-      terminalAndBrowser: [
+      "Terminal and Browser": [
           {app: TERMINAL,  whereTo: "toLeftHalf" },
           {app: BROWSER,   whereTo: "toRightHalf"}]
-      finderAndTerminal: [
+      "Finder and Terminal": [
           {app: TERMINAL,  whereTo: "toRightHalf"},
           {app: FINDER,    whereTo: "toLeftHalf" }]
 
@@ -308,10 +308,10 @@ Switch to or lauch apps, as defined in the [Application config](#application-con
 
 Switch layouts using the predefined [Layout config](#layout-config)
 
-    key_binding "5",     mash, -> switchLayout "editorAndBrowser"
-    key_binding "4",     mash, -> switchLayout "editorAndTerminal"
-    key_binding "3",     mash, -> switchLayout "terminalAndBrowser"
-    key_binding "2",     mash, -> switchLayout "finderAndTerminal"
+    key_binding "5",     mash, -> switchLayout "Editor and Browser"
+    key_binding "4",     mash, -> switchLayout "Editor and Terminal"
+    key_binding "3",     mash, -> switchLayout "Terminal and Browser"
+    key_binding "2",     mash, -> switchLayout "Finder and Terminal"
 
 Move window between screens
 
