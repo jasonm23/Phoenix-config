@@ -284,61 +284,61 @@ Alias `api.bind` as `key_binding`,
 
 Mash is **Cmd** + **Alt/Opt** + **Ctrl** pressed together.
 
-    mash = "cmd+alt+ctrl".split "+"
+    mash = 'cmd+alt+ctrl'.split '+'
 
 Move the current window to the top / bottom / left / right half of the screen
 and fill it.
 
-    key_binding "up",    mash, -> Window.focusedWindow().toTopHalf()
-    key_binding "down",  mash, -> Window.focusedWindow().toBottomHalf()
-    key_binding "left",  mash, -> Window.focusedWindow().toLeftHalf()
-    key_binding "right", mash, -> Window.focusedWindow().toRightHalf()
+    key_binding 'up',    mash, -> Window.focusedWindow().toTopHalf()
+    key_binding 'down',  mash, -> Window.focusedWindow().toBottomHalf()
+    key_binding 'left',  mash, -> Window.focusedWindow().toLeftHalf()
+    key_binding 'right', mash, -> Window.focusedWindow().toRightHalf()
 
 Maximize the current window
 
-    key_binding "M",     mash, -> Window.focusedWindow().toFullScreen()
+    key_binding 'M',     mash, -> Window.focusedWindow().toFullScreen()
 
 Switch to or lauch apps, as defined in the [Application config](#application-config)
 
-    key_binding "0",     mash, -> App.focusOrStart EDITOR
-    key_binding "9",     mash, -> App.focusOrStart TERMINAL
-    key_binding "8",     mash, -> App.focusOrStart BROWSER
-    key_binding "7",     mash, -> App.focusOrStart MUSIC
-    key_binding "6",     mash, -> App.focusOrStart FINDER
+    key_binding '0',     mash, -> App.focusOrStart EDITOR
+    key_binding '9',     mash, -> App.focusOrStart TERMINAL
+    key_binding '8',     mash, -> App.focusOrStart BROWSER
+    key_binding '7',     mash, -> App.focusOrStart MUSIC
+    key_binding '6',     mash, -> App.focusOrStart FINDER
 
 Switch layouts using the predefined [Layout config](#layout-config)
 
-    key_binding "5",     mash, -> switchLayout "Editor and Browser"
-    key_binding "4",     mash, -> switchLayout "Editor and Terminal"
-    key_binding "3",     mash, -> switchLayout "Terminal and Browser"
-    key_binding "2",     mash, -> switchLayout "Finder and Terminal"
+    key_binding '5',     mash, -> switchLayout 'Editor and Browser'
+    key_binding '4',     mash, -> switchLayout 'Editor and Terminal'
+    key_binding '3',     mash, -> switchLayout 'Terminal and Browser'
+    key_binding '2',     mash, -> switchLayout 'Finder and Terminal'
 
 Move window between screens
 
-    key_binding "N",     mash, -> moveWindowToNextScreen()
-    key_binding "P",     mash, -> moveWindowToPreviousScreen()
+    key_binding 'N',     mash, -> moveWindowToNextScreen()
+    key_binding 'P',     mash, -> moveWindowToPreviousScreen()
 
 Setting the grid size
 
-    key_binding "=",     mash, -> changeGridWidth +1
-    key_binding "-",     mash, -> changeGridWidth -1
+    key_binding '=',     mash, -> changeGridWidth +1
+    key_binding '-',     mash, -> changeGridWidth -1
 
 Snap current window or all windows to the grid
 
-    key_binding ";",     mash, -> Window.focusedWindow().snapToGrid()
+    key_binding ';',     mash, -> Window.focusedWindow().snapToGrid()
     key_binding "'",     mash, -> Window.visibleWindows().map (win)-> win.snapToGrid()
 
 Move the current window around the grid
 
-    key_binding "H",     mash, -> moveWindowLeftOneColumn()
-    key_binding "K",     mash, -> windowToTopRow()
-    key_binding "J",     mash, -> windowToBottomRow()
-    key_binding "L",     mash, -> moveWindowRightOneColumn()
+    key_binding 'H',     mash, -> moveWindowLeftOneColumn()
+    key_binding 'K',     mash, -> windowToTopRow()
+    key_binding 'J',     mash, -> windowToBottomRow()
+    key_binding 'L',     mash, -> moveWindowRightOneColumn()
 
 Size the current window on the grid
 
-    key_binding "U",     mash, -> windowToFullHeight()
-    key_binding "I",     mash, -> windowShrinkOneGridColumn()
-    key_binding "O",     mash, -> windowGrowOneGridColumn()
+    key_binding 'U',     mash, -> windowToFullHeight()
+    key_binding 'I',     mash, -> windowShrinkOneGridColumn()
+    key_binding 'O',     mash, -> windowGrowOneGridColumn()
 
 That's all folks.
