@@ -59,6 +59,9 @@ Using these defaults `EDITOR` gets preference.
       "Finder and Terminal": [
           {app: TERMINAL,  whereTo: "toRightHalf"},
           {app: FINDER,    whereTo: "toLeftHalf" }]
+      "Finder and Browser": [
+          {app: BROWSER,   whereTo: "toRightHalf"},
+          {app: FINDER,    whereTo: "toLeftHalf" }]
 
 ## Methods
 
@@ -324,6 +327,8 @@ Switch layouts using the predefined [Layout config](#layout-config)
     key_binding '4',     mash, -> switchLayout 'Editor and Terminal'
     key_binding '3',     mash, -> switchLayout 'Terminal and Browser'
     key_binding '2',     mash, -> switchLayout 'Finder and Terminal'
+    key_binding '1',     mash, -> switchLayout 'Finder and Browser'
+
 
 Move window between screens
 
