@@ -29,6 +29,13 @@ node/npm](https://github.com/joyent/node/wiki/installation) (or use
 npm install -g coffee-script
 ```
 
+## Debugging helpers
+
+We'll use a 20 second alert to show debug messages, +1 for a Phoenix REPL!
+
+    debug = (message)->
+      api.alert message, 10
+
 ## Basic Settings
 
     MARGIN_X    = 3
@@ -139,6 +146,50 @@ Window to grid
       @setFrame rect
       this
 
+Window top right point
+
+    Window::topRight = ->
+      f = @frame()
+      {
+        x: f.x + f.width
+        y: f.y
+      }
+
+Windows on the left
+
+    Window::toLeft = ->
+      p = @topLeft()
+      _.chain(@windowsToWest())
+      .filter (win)->
+        win.topLeft().x < p.x - 10
+      .value()
+
+Windows on the right
+
+    Window::toRight = ->
+      p = @topRight()
+      _.chain(@windowsToEast())
+      .filter (win) ->
+        win.topRight().x > p.x + 10
+      .value()
+
+Window information
+
+    Window::info = ->
+      f = @frame()
+      "#{@app().title()} : #{@title()}\n{x:#{f.x}, y:#{f.y}, width:#{f.width}, height:#{f.height}}\n"
+
+Sort any window collection by most recently with focus. We use
+`info()` as a way of identifying the windows in place. Not too
+performant, but with collections of this size, it's not a problem.
+
+    Window.sortByMostRecent = (windows)->
+      allVisible = Window.visibleWindowsMostRecentFirst()
+      _.chain(windows)
+      .sortBy (win)->
+        allVisible.map((w)-> w.info()).indexOf(win.info())
+      .value()
+
 ### Applications
 
 Select the first window for an app
@@ -216,10 +267,16 @@ Remember and forget frames
 
 Set a window to top / bottom / left / right
 
-    Window::toTopHalf = -> @toGrid 0, 0, 1, 0.5
-    Window::toBottomHalf = -> @toGrid 0, 0.5, 1, 0.5
-    Window::toLeftHalf = -> @toGrid 0, 0, 0.5, 1
-    Window::toRightHalf = -> @toGrid 0.5, 0, 0.5, 1
+    #                                  x:   y:   w:   h:
+    Window::toTopHalf     = -> @toGrid 0,   0,   1,   0.5
+    Window::toBottomHalf  = -> @toGrid 0,   0.5, 1,   0.5
+    Window::toLeftHalf    = -> @toGrid 0,   0,   0.5, 1
+    Window::toRightHalf   = -> @toGrid 0.5, 0,   0.5, 1
+    #                                  x:   y:   w:   h:
+    Window::toTopRight    = -> @toGrid 0.5, 0,   0.5, 0.5
+    Window::toBottomRight = -> @toGrid 0.5, 0.5, 0.5, 0.5
+    Window::toTopLeft     = -> @toGrid 0,   0,   0.5, 0.5
+    Window::toBottomLeft  = -> @toGrid 0,   0.5, 0.5, 0.5
 
 Move the current window to the next / previous screen
 
@@ -286,35 +343,36 @@ Expand the current window's height to vertically fill the screen
 
 ## Transpose windows
 
-**Work In Progress** : Transpose 2 horizontal windows, check the window to the left, or right, and
-swap position. Left window takes presidence. Optionally exchange frame sizes.
+    transposeWindows = (swapFrame = true, switchFocus = true)->
+      win = Window.focusedWindow()
+      left = win.toRight()
+      right = win.toLeft()
+      targets = if left.length > 0
+        left
+      else if right.length > 0
+        right
 
-Find window to the left...
+      unless targets?.length > 0
+        api.alert "Can't see any windows to transpose"
+        return win
 
-- Store current window top/left point
-- Collect/index top/left points of windows to "West".
-- Check for x positions less than current window
-- Get closest x position to current window
-- Store found (or null)
+      target = Window.sortByMostRecent(targets)[0]
 
-None found? Find window to the right.
+      t = target.frame()
+      w = win.frame()
 
-- Store current window top/right point
-- Collect/index top/right points of windows to "East"
-- Check for x positions greater than current window
-- Check for nearest x position to current window
-- Store found (or null)
+      if swapFrame
+        win.setFrame t
+        target.setFrame w
+      else
+        target.topLeft x:w.x, y:w.y
+        win.topLeft    x:t.x, y:t.y
 
-Found? (or exit)
-
-- Get frame of found
-- Get frame of current
-- Option to exchange sizes?
-  - Yes: Exchange frames
-  - No: Exchange origins
-
-... TODO: Code this.
-
+      if switchFocus
+        target.focusWindow()
+        return target
+      else
+        return win
 
 ### Manage layouts
 
@@ -339,6 +397,11 @@ Mash is **Cmd** + **Alt/Opt** + **Ctrl** pressed together.
 
     mash = 'cmd+alt+ctrl'.split '+'
 
+Transpose (TODO)
+
+    key_binding "T",     mash, -> transposeWindows()
+    key_binding "Y",     mash, -> api.alert(Window.visibleWindowsMostRecentFirst().map( (w)-> w.info() ))
+
 Move the current window to the top / bottom / left / right half of the screen
 and fill it.
 
@@ -346,6 +409,20 @@ and fill it.
     key_binding 'down',  mash, -> Window.focusedWindow().toBottomHalf()
     key_binding 'left',  mash, -> Window.focusedWindow().toLeftHalf()
     key_binding 'right', mash, -> Window.focusedWindow().toRightHalf()
+
+Move to the corners of the screen
+
+    key_binding 'Q',     mash, -> Window.focusedWindow().toTopLeft()
+    key_binding 'A',     mash, -> Window.focusedWindow().toBottomLeft()
+    key_binding 'W',     mash, -> Window.focusedWindow().toTopRight()
+    key_binding 'S',     mash, -> Window.focusedWindow().toBottomRight()
+
+Focus to direction
+
+    key_binding 'R',     mash, -> Window.focusedWindow().focusWindowUp()
+    key_binding 'D',     mash, -> Window.focusedWindow().focusWindowLeft()
+    key_binding 'F',     mash, -> Window.focusedWindow().focusWindowRight()
+    key_binding 'C',     mash, -> Window.focusedWindow().focusWindowDown()
 
 Maximize the current window
 
