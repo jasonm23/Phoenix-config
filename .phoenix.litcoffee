@@ -47,8 +47,9 @@ We'll use a 20 second alert to show debug messages, +1 for a Phoenix REPL!
     EDITOR      = "Emacs"
     BROWSER     = "Google Chrome"
     TERMINAL    = "iTerm"
-    MUSIC       = "iTunes"
     FINDER      = "Finder"
+    MUSIC       = "iTunes"
+    VIDEO       = "VLC"
 
 ## Layout config
 
@@ -440,6 +441,7 @@ Switch to or lauch apps, as defined in the [Application config](#application-con
     key_binding '8',     mash, -> App.focusOrStart BROWSER
     key_binding '7',     mash, -> App.focusOrStart MUSIC
     key_binding '6',     mash, -> App.focusOrStart FINDER
+    key_binding 'V',     mash, -> App.focusOrStart VIDEO
 
 Switch layouts using the predefined [Layout config](#layout-config)
 
