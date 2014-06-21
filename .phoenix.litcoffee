@@ -79,7 +79,7 @@ will get focus.
 
 ## Methods
 
-### Grid
+### Window Grid
 
 Snap all windows to grid layout
 
@@ -147,7 +147,6 @@ Window to grid
       @setFrame rect
       this
 
-### Window helpers
 
 Window top right point
 
@@ -176,7 +175,7 @@ Windows on the right
         win.topRight().x > p.x + 10
       .value()
 
-Window information
+### Window information
 
     Window::info = ->
       f = @frame()
@@ -192,64 +191,6 @@ performant, but with collections of this size, it's not a problem.
       .sortBy (win)->
         allVisible.map((w)-> w.info()).indexOf(win.info())
       .value()
-
-### Applications
-
-Select the first window for an app
-
-    App::firstWindow = -> @visibleWindows()[0]
-
-Find an app by it's `title`
-
-    App.byTitle = (title) ->
-      apps = @runningApps()
-      i = 0
-      while i < apps.length
-        app = apps[i]
-        if app.title() is title
-          app.show()
-          return app
-        i++
-      return
-
-Find all apps with `title`
-
-    App.allWithTitle = (title) ->
-      _(@runningApps()).filter (app) ->
-        true  if app.title() is title
-
-Focus or start an app with `title`
-
-    App.focusOrStart = (title) ->
-      apps = App.allWithTitle(title)
-      if _.isEmpty(apps)
-        api.alert "Attempting to start #{title}"
-        api.launch title
-        return
-
-      windows = _.chain(apps)
-      .map (x) ->
-        x.allWindows()
-      .flatten()
-      .value()
-
-      activeWindows = _(windows)
-      .reject (win) ->
-        win.isWindowMinimized()
-
-      if _.isEmpty(activeWindows)
-        api.launch title
-
-      activeWindows.forEach (win) ->
-        win.focusWindow()
-        return
-      return
-
-Run the given function `f` for an app with `title`
-
-    forApp = (title, f) ->
-      app = App.byTitle(title)
-      _.each app.visibleWindows(), f  if app
 
 ### Window moving and sizing
 
@@ -349,7 +290,7 @@ Expand the current window's height to vertically fill the screen
       frame.h = 2
       win.setGrid frame, win.screen()
 
-## Transpose windows
+### Transpose windows
 
     transposeWindows = (swapFrame = true, switchFocus = true)->
       win = Window.focusedWindow()
@@ -362,7 +303,7 @@ Expand the current window's height to vertically fill the screen
 
       unless targets?.length > 0
         api.alert "Can't see any windows to transpose"
-        return win
+        return
 
       target = Window.sortByMostRecent(targets)[0]
 
@@ -376,11 +317,65 @@ Expand the current window's height to vertically fill the screen
         target.topLeft x:w.x, y:w.y
         win.topLeft    x:t.x, y:t.y
 
-      if switchFocus
-        target.focusWindow()
-        return target
-      else
-        return win
+      target.focusWindow() if switchFocus
+
+### Applications
+
+Select the first window for an app
+
+    App::firstWindow = -> @visibleWindows()[0]
+
+Find an app by it's `title`
+
+    App.byTitle = (title) ->
+      apps = @runningApps()
+      i = 0
+      while i < apps.length
+        app = apps[i]
+        if app.title() is title
+          app.show()
+          return app
+        i++
+      return
+
+Find all apps with `title`
+
+    App.allWithTitle = (title) ->
+      _(@runningApps()).filter (app) ->
+        true  if app.title() is title
+
+Focus or start an app with `title`
+
+    App.focusOrStart = (title) ->
+      apps = App.allWithTitle(title)
+      if _.isEmpty(apps)
+        api.alert "Attempting to start #{title}"
+        api.launch title
+        return
+
+      windows = _.chain(apps)
+      .map (x) ->
+        x.allWindows()
+      .flatten()
+      .value()
+
+      activeWindows = _(windows)
+      .reject (win) ->
+        win.isWindowMinimized()
+
+      if _.isEmpty(activeWindows)
+        api.launch title
+
+      activeWindows.forEach (win) ->
+        win.focusWindow()
+        return
+      return
+
+Run the given function `f` for an app with `title`
+
+    forApp = (title, f) ->
+      app = App.byTitle(title)
+      _.each app.visibleWindows(), f  if app
 
 ### Manage layouts
 
@@ -394,7 +389,8 @@ Switch to a predefined layout [as above](#layout-config)
 
 ### Binding alias
 
-Alias `api.bind` as `key_binding`,
+Alias `api.bind` as `key_binding`, to make the binding table extra
+readable.
 
     key_binding = (key, modifier, fn)->
       api.bind key, modifier, fn
