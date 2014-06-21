@@ -147,7 +147,7 @@ Window to grid
       @setFrame rect
       this
 
-## Window helpers
+### Window helpers
 
 Window top right point
 
