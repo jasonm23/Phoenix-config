@@ -209,37 +209,6 @@ Set a window to full screen
         @setFrame lastFrames[this]
         @forgetFrame()
 
-## Transpose windows
-
-**Work In Progress** : Transpose 2 horizontal windows, check the window to the left, or right, and
-swap position. Left window takes presidence. Optionally exchange frame sizes.
-
-Find window to the left...
-
-- Store current window top/left point
-- Collect/index top/left points of windows to "West".
-- Check for x positions less than current window
-- Get closest x position to current window
-- Store found (or null)
-
-None found? Find window to the right.
-
-- Store current window top/right point
-- Collect/index top/right points of windows to "East"
-- Check for x positions greater than current window
-- Check for nearest x position to current window
-- Store found (or null)
-
-Found? (or exit)
-
-- Get frame of found
-- Get frame of current
-- Option to exchange sizes?
-  - Yes: Exchange frames
-  - No: Exchange origins
-
-... TODO: Code this.
-
 Remember and forget frames
 
     Window::rememberFrame = -> lastFrames[this] = @frame()
@@ -314,6 +283,38 @@ Expand the current window's height to vertically fill the screen
       frame.y = 0
       frame.h = 2
       win.setGrid frame, win.screen()
+
+## Transpose windows
+
+**Work In Progress** : Transpose 2 horizontal windows, check the window to the left, or right, and
+swap position. Left window takes presidence. Optionally exchange frame sizes.
+
+Find window to the left...
+
+- Store current window top/left point
+- Collect/index top/left points of windows to "West".
+- Check for x positions less than current window
+- Get closest x position to current window
+- Store found (or null)
+
+None found? Find window to the right.
+
+- Store current window top/right point
+- Collect/index top/right points of windows to "East"
+- Check for x positions greater than current window
+- Check for nearest x position to current window
+- Store found (or null)
+
+Found? (or exit)
+
+- Get frame of found
+- Get frame of current
+- Option to exchange sizes?
+  - Yes: Exchange frames
+  - No: Exchange origins
+
+... TODO: Code this.
+
 
 ### Manage layouts
 
