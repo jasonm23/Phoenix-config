@@ -219,24 +219,25 @@ Find all apps with `title`
 
 Focus or start an app with `title`
 
-    App.focusOrStart = (title, override = false) ->
+    App.focusOrStart = (title) ->
       apps = App.allWithTitle(title)
       if _.isEmpty(apps)
         api.alert "Attempting to start #{title}"
         api.launch title
         return
-      windows = _.chain(apps).map((x) ->
-        x.allWindows()
-      ).flatten().value()
-      activeWindows = _(windows).reject((win) ->
-        win.isWindowMinimized()
-      )
 
-      if _.isEmpty(activeWindows) and not override
-        api.alert "All windows minimized for " + title
-        return
-      else _.isEmpty(activeWindows) and override
-        apps[0].show()
+      windows = _.chain(apps)
+      .map (x) ->
+        x.allWindows()
+      .flatten()
+      .value()
+
+      activeWindows = _(windows)
+      .reject (win) ->
+        win.isWindowMinimized()
+
+      if _.isEmpty(activeWindows)
+        api.launch title
 
       activeWindows.forEach (win) ->
         win.focusWindow()
@@ -449,7 +450,7 @@ Switch to or lauch apps, as defined in the [Application config](#application-con
 
     # Entertainment apps...
 
-    key_binding 'V',     mash, -> App.focusOrStart VIDEO, USE_OVERRIDE
+    key_binding 'V',     mash, -> App.focusOrStart VIDEO
     key_binding 'B',     mash, -> App.focusOrStart MUSIC
 
 Switch layouts using the predefined [Layout config](#layout-config)
