@@ -439,9 +439,12 @@ Switch to or lauch apps, as defined in the [Application config](#application-con
     key_binding '0',     mash, -> App.focusOrStart EDITOR
     key_binding '9',     mash, -> App.focusOrStart TERMINAL
     key_binding '8',     mash, -> App.focusOrStart BROWSER
-    key_binding '7',     mash, -> App.focusOrStart MUSIC
-    key_binding '6',     mash, -> App.focusOrStart FINDER
-    key_binding 'V',     mash, -> App.focusOrStart VIDEO
+    key_binding '7',     mash, -> App.focusOrStart FINDER
+
+    # Entertainment apps...
+
+    key_binding 'V',     mash, -> App.focusOrStart VIDEO # Video
+    key_binding 'B',     mash, -> App.focusOrStart MUSIC # B for Beats?!
 
 Switch layouts using the predefined [Layout config](#layout-config)
 
