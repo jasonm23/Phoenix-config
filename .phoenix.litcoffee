@@ -486,4 +486,4 @@ Size the current window on the grid
 
 That's all folks.
 
-[1]:https://farm3.staticflickr.com/2926/14494477913_2806990534_b.jpg
+[1]:https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/8d6748acb5ac739c7a90692caeee3d971f34759d/phoenix.keyboard.png
