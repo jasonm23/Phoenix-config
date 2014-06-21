@@ -1,0 +1,3 @@
+#!/bin/sh
+
+coffee --bare --compile --literate -o ~/.phoenix.js .phoenix.litcoffee

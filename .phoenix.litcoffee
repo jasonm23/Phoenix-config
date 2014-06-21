@@ -17,6 +17,8 @@ plain JS, for use with Phoenix.app using:
 coffee --bare --literate --compile .phoenix.litcoffee
 ```
 
+(Or use the `compile` script included in the gist)
+
 ### Install CoffeeScript
 
 If you don't have CoffeeScript installed, you'll need to [install
@@ -43,25 +45,29 @@ npm install -g coffee-script
 
 ## Layout config
 
-A couple of helpful app layouts. **note:** The last app in a layout array will get focus.
-Using these defaults `EDITOR` gets preference.
+A few helpful app layouts. **note:** The last app in a layout array
+will get focus.
 
     layouts =
-      "Editor and Browser": [
-          {app: BROWSER,   whereTo: "toRightHalf"},
-          {app: EDITOR,    whereTo: "toLeftHalf" }]
-      "Editor and Terminal": [
-          {app: TERMINAL,  whereTo: "toRightHalf"},
-          {app: EDITOR,    whereTo: "toLeftHalf" }]
-      "Terminal and Browser": [
-          {app: TERMINAL,  whereTo: "toLeftHalf" },
-          {app: BROWSER,   whereTo: "toRightHalf"}]
-      "Finder and Terminal": [
-          {app: TERMINAL,  whereTo: "toRightHalf"},
-          {app: FINDER,    whereTo: "toLeftHalf" }]
-      "Finder and Browser": [
-          {app: BROWSER,   whereTo: "toRightHalf"},
-          {app: FINDER,    whereTo: "toLeftHalf" }]
+      "Editor and Browser":
+        0: app: BROWSER,  whereTo: "toRightHalf"
+        1: app: EDITOR,   whereTo: "toLeftHalf"
+
+      "Editor and Terminal":
+        0: app: TERMINAL, whereTo: "toRightHalf"
+        1: app: EDITOR,   whereTo: "toLeftHalf"
+
+      "Terminal and Browser":
+        0: app: TERMINAL, whereTo: "toLeftHalf"
+        1: app: BROWSER,  whereTo: "toRightHalf"
+
+      "Finder and Terminal":
+        0: app: TERMINAL, whereTo: "toRightHalf"
+        1: app: FINDER,   whereTo: "toLeftHalf"
+
+      "Finder and Browser":
+        0: app: BROWSER,  whereTo: "toRightHalf"
+        1: app: FINDER,   whereTo: "toLeftHalf"
 
 ## Methods
 
@@ -203,6 +209,13 @@ Set a window to full screen
         @setFrame lastFrames[this]
         @forgetFrame()
 
+Transpose two windows, check the window to the left, or right, and
+swap position. Left window takes presidence.
+
+    Window::transpose = ->
+      # Find window to the left...
+      frame = @frame()
+
 Remember and forget frames
 
     Window::rememberFrame = -> lastFrames[this] = @frame()
@@ -288,9 +301,9 @@ Switch to a predefined layout [as above](#layout-config)
         app = App.byTitle config.app
         app.firstWindow()[config.whereTo]()
 
-### Binding alias 
+### Binding alias
 
-Alias `api.bind` as `key_binding`, 
+Alias `api.bind` as `key_binding`,
 
     key_binding = (key, modifier, fn)->
       api.bind key, modifier, fn
@@ -328,7 +341,6 @@ Switch layouts using the predefined [Layout config](#layout-config)
     key_binding '3',     mash, -> switchLayout 'Terminal and Browser'
     key_binding '2',     mash, -> switchLayout 'Finder and Terminal'
     key_binding '1',     mash, -> switchLayout 'Finder and Browser'
-
 
 Move window between screens
 
