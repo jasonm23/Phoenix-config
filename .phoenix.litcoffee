@@ -38,18 +38,19 @@ We'll use a 20 second alert to show debug messages, +1 for a Phoenix REPL!
 
 ## Basic Settings
 
-    MARGIN_X    = 3
-    MARGIN_Y    = 3
-    GRID_WIDTH  = 3
+    MARGIN_X     = 3
+    MARGIN_Y     = 3
+    GRID_WIDTH   = 3
+    USE_OVERRIDE = true
 
 ## Application config
 
-    EDITOR      = "Emacs"
-    BROWSER     = "Google Chrome"
-    TERMINAL    = "iTerm"
-    FINDER      = "Finder"
-    MUSIC       = "iTunes"
-    VIDEO       = "VLC"
+    EDITOR       = "Emacs"
+    BROWSER      = "Google Chrome"
+    TERMINAL     = "iTerm"
+    FINDER       = "Finder"
+    MUSIC        = "iTunes"
+    VIDEO        = "VLC"
 
 ## Layout config
 
@@ -218,7 +219,7 @@ Find all apps with `title`
 
 Focus or start an app with `title`
 
-    App.focusOrStart = (title) ->
+    App.focusOrStart = (title, override = false) ->
       apps = App.allWithTitle(title)
       if _.isEmpty(apps)
         api.alert "Attempting to start #{title}"
@@ -230,9 +231,13 @@ Focus or start an app with `title`
       activeWindows = _(windows).reject((win) ->
         win.isWindowMinimized()
       )
-      if _.isEmpty(activeWindows)
+
+      if _.isEmpty(activeWindows) and not override
         api.alert "All windows minimized for " + title
         return
+      else _.isEmpty(activeWindows) and override
+        apps[0].show()
+
       activeWindows.forEach (win) ->
         win.focusWindow()
         return
@@ -400,9 +405,10 @@ Mash is **Cmd** + **Alt/Opt** + **Ctrl** pressed together.
 
 Transpose/Swap Windows
 
-    key_binding "T",     mash, -> transposeWindows()
-    # Transpose without switching focus
-    key_binding "Y",     mash, -> transposeWindows(true, false)
+    # Transpose
+    key_binding "T",     mash, -> transposeWindows(true, false)
+    # Transpose and switch focus
+    key_binding "Y",     mash, -> transposeWindows(true, true)
 
 Cycle Windows
 
@@ -443,8 +449,8 @@ Switch to or lauch apps, as defined in the [Application config](#application-con
 
     # Entertainment apps...
 
-    key_binding 'V',     mash, -> App.focusOrStart VIDEO # Video
-    key_binding 'B',     mash, -> App.focusOrStart MUSIC # B for Beats?!
+    key_binding 'V',     mash, -> App.focusOrStart VIDEO, USE_OVERRIDE
+    key_binding 'B',     mash, -> App.focusOrStart MUSIC
 
 Switch layouts using the predefined [Layout config](#layout-config)
 
