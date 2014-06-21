@@ -209,7 +209,9 @@ Set a window to full screen
         @setFrame lastFrames[this]
         @forgetFrame()
 
-**Work In Progress** : Transpose Horizontal two windows, check the window to the left, or right, and
+## Transpose windows
+
+**Work In Progress** : Transpose 2 horizontal windows, check the window to the left, or right, and
 swap position. Left window takes presidence. Optionally exchange frame sizes.
 
 Find window to the left...
