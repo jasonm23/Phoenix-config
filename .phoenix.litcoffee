@@ -41,7 +41,6 @@ We'll use a 20 second alert to show debug messages, +1 for a Phoenix REPL!
     MARGIN_X     = 3
     MARGIN_Y     = 3
     GRID_WIDTH   = 3
-    USE_OVERRIDE = true
 
 ## Application config
 
