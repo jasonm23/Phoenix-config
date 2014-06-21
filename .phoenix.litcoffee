@@ -147,6 +147,8 @@ Window to grid
       @setFrame rect
       this
 
+## Window helpers
+
 Window top right point
 
     Window::topRight = ->
@@ -409,10 +411,6 @@ Transpose/Swap Windows
     key_binding "T",     mash, -> transposeWindows(true, false)
     # Transpose and switch focus
     key_binding "Y",     mash, -> transposeWindows(true, true)
-
-Cycle Windows
-
-    # TODO: Grab the cycling methods from other configs in the Wiki ;)
 
 Move the current window to the top / bottom / left / right half of the screen
 and fill it.
