@@ -397,12 +397,15 @@ Mash is **Cmd** + **Alt/Opt** + **Ctrl** pressed together.
 
     mash = 'cmd+alt+ctrl'.split '+'
 
-Transpose Windows
+Transpose/Swap Windows
 
     key_binding "T",     mash, -> transposeWindows()
-
     # Transpose without switching focus
     key_binding "Y",     mash, -> transposeWindows(true, false)
+
+Cycle Windows
+
+    # TODO: Grab the cycling methods from other configs in the Wiki ;)
 
 Move the current window to the top / bottom / left / right half of the screen
 and fill it.
