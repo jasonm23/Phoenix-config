@@ -397,10 +397,12 @@ Mash is **Cmd** + **Alt/Opt** + **Ctrl** pressed together.
 
     mash = 'cmd+alt+ctrl'.split '+'
 
-Transpose (TODO)
+Transpose Windows
 
     key_binding "T",     mash, -> transposeWindows()
-    key_binding "Y",     mash, -> api.alert(Window.visibleWindowsMostRecentFirst().map( (w)-> w.info() ))
+
+    # Transpose without switching focus
+    key_binding "Y",     mash, -> transposeWindows(true, false)
 
 Move the current window to the top / bottom / left / right half of the screen
 and fill it.
