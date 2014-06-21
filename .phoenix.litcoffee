@@ -17,7 +17,7 @@ plain JS, for use with Phoenix.app using:
 coffee --bare --literate --compile .phoenix.litcoffee
 ```
 
-(Or use the `compile` script included in the gist)
+(Or use the `./compile` script included in the gist)
 
 ### Install CoffeeScript
 
