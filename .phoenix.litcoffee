@@ -97,7 +97,7 @@ Change grid by a width factor
       snapAllToGrid()
       return
 
-Get the current grid as `{x:,y:,w:,h:}`
+Get the current grid as `{x:,y:,width:,height:}`
 
     Window::getGrid = ->
       winFrame = @frame()
@@ -106,10 +106,10 @@ Get the current grid as `{x:,y:,w:,h:}`
       halfScreenHeight = screenRect.height / 2
       x: Math.round((winFrame.x - screenRect.x) / thirdScreenWidth)
       y: Math.round((winFrame.y - screenRect.y) / halfScreenHeight)
-      w: Math.max(1, Math.round(winFrame.width / thirdScreenWidth))
-      h: Math.max(1, Math.round(winFrame.height / halfScreenHeight))
+      width: Math.max(1, Math.round(winFrame.width / thirdScreenWidth))
+      height: Math.max(1, Math.round(winFrame.height / halfScreenHeight))
 
-Set the current grid from an object `{x:,y:,w:,h:}`
+Set the current grid from an object `{x:,y:,width:,height:}`
 
     Window::setGrid = (grid, screen) ->
       screenRect = screen.frameWithoutDockOrMenu()
@@ -118,8 +118,8 @@ Set the current grid from an object `{x:,y:,w:,h:}`
       newFrame =
         x: (grid.x * thirdScreenWidth) + screenRect.x
         y: (grid.y * halfScreenHeight) + screenRect.y
-        width: grid.w * thirdScreenWidth
-        height: grid.h * halfScreenHeight
+        width: grid.width * thirdScreenWidth
+        height: grid.height * halfScreenHeight
       newFrame.x += MARGIN_X
       newFrame.y += MARGIN_Y
       newFrame.width -= (MARGIN_X * 2.0)
@@ -216,16 +216,16 @@ Remember and forget frames
 
 Set a window to top / bottom / left / right
 
-    #                                  x:   y:   w:   h:
-    Window::toTopHalf     = -> @toGrid 0,   0,   1,   0.5
-    Window::toBottomHalf  = -> @toGrid 0,   0.5, 1,   0.5
-    Window::toLeftHalf    = -> @toGrid 0,   0,   0.5, 1
-    Window::toRightHalf   = -> @toGrid 0.5, 0,   0.5, 1
-    #                                  x:   y:   w:   h:
-    Window::toTopRight    = -> @toGrid 0.5, 0,   0.5, 0.5
-    Window::toBottomRight = -> @toGrid 0.5, 0.5, 0.5, 0.5
-    Window::toTopLeft     = -> @toGrid 0,   0,   0.5, 0.5
-    Window::toBottomLeft  = -> @toGrid 0,   0.5, 0.5, 0.5
+    #                                  x:   y:   width: height:
+    Window::toTopHalf     = -> @toGrid 0,   0,   1,     0.5
+    Window::toBottomHalf  = -> @toGrid 0,   0.5, 1,     0.5
+    Window::toLeftHalf    = -> @toGrid 0,   0,   0.5,   1
+    Window::toRightHalf   = -> @toGrid 0.5, 0,   0.5,   1
+    #                                  x:   y:   width: height:
+    Window::toTopRight    = -> @toGrid 0.5, 0,   0.5,   0.5
+    Window::toBottomRight = -> @toGrid 0.5, 0.5, 0.5,   0.5
+    Window::toTopLeft     = -> @toGrid 0,   0,   0.5,   0.5
+    Window::toBottomLeft  = -> @toGrid 0,   0.5, 0.5,   0.5
 
 Move the current window to the next / previous screen
 
@@ -248,7 +248,7 @@ Move the current window by one column
     moveWindowRightOneColumn = ->
       win = Window.focusedWindow()
       frame = win.getGrid()
-      frame.x = Math.min(frame.x + 1, GRID_WIDTH - frame.w)
+      frame.x = Math.min(frame.x + 1, GRID_WIDTH - frame.width)
       win.setGrid frame, win.screen()
 
 Grow and shrink the current window by a single grid column
@@ -256,13 +256,13 @@ Grow and shrink the current window by a single grid column
     windowGrowOneGridColumn = ->
       win = Window.focusedWindow()
       frame = win.getGrid()
-      frame.w = Math.min(frame.w + 1, GRID_WIDTH - frame.x)
+      frame.width = Math.min(frame.width + 1, GRID_WIDTH - frame.x)
       win.setGrid frame, win.screen()
 
     windowShrinkOneGridColumn = ->
       win = Window.focusedWindow()
       frame = win.getGrid()
-      frame.w = Math.max(frame.w - 1, 1)
+      frame.width = Math.max(frame.width - 1, 1)
       win.setGrid frame, win.screen()
 
 Shift the current window to the bottom or top row
@@ -271,14 +271,14 @@ Shift the current window to the bottom or top row
       win = Window.focusedWindow()
       frame = win.getGrid()
       frame.y = 1
-      frame.h = 1
+      frame.height = 1
       win.setGrid frame, win.screen()
 
     windowToTopRow = ->
       win = Window.focusedWindow()
       frame = win.getGrid()
       frame.y = 0
-      frame.h = 1
+      frame.height = 1
       win.setGrid frame, win.screen()
 
 Expand the current window's height to vertically fill the screen
@@ -287,7 +287,7 @@ Expand the current window's height to vertically fill the screen
       win = Window.focusedWindow()
       frame = win.getGrid()
       frame.y = 0
-      frame.h = 2
+      frame.height = 2
       win.setGrid frame, win.screen()
 
 ### Transpose windows
@@ -307,15 +307,15 @@ Expand the current window's height to vertically fill the screen
 
       target = Window.sortByMostRecent(targets)[0]
 
-      t = target.frame()
-      w = win.frame()
+      t_frame = target.frame()
+      w_frame = win.frame()
 
       if swapFrame
-        win.setFrame t
-        target.setFrame w
+        win.setFrame t_frame
+        target.setFrame w_frame
       else
-        target.topLeft x:w.x, y:w.y
-        win.topLeft    x:t.x, y:t.y
+        target.topLeft x:w_frame.x, y:w_frame.y
+        win.topLeft    x:t_frame.x, y:t_frame.y
 
       target.focusWindow() if switchFocus
 
@@ -371,11 +371,11 @@ Focus or start an app with `title`
         return
       return
 
-Run the given function `f` for an app with `title`
+Run the given function `fn` for an app with `title`
 
-    forApp = (title, f) ->
+    forApp = (title, fn) ->
       app = App.byTitle(title)
-      _.each app.visibleWindows(), f  if app
+      _.each app.visibleWindows(), fn  if app
 
 ### Manage layouts
 
@@ -494,5 +494,8 @@ That's all folks.
 
     key_binding '/',     mash, ->
       api.runCommand "/usr/bin/open", ["https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/phoenix.keyboard.png"]
+
+Note: `api.runCommand` is undocumented in the API ref, I've included
+the method signature in the API ref in this gist.
 
 [1]:https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/phoenix.keyboard.png
