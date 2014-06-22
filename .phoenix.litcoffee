@@ -179,7 +179,7 @@ Windows on the right
 
     Window::info = ->
       f = @frame()
-      "#{@app().title()} : #{@title()}\n{x:#{f.x}, y:#{f.y}, width:#{f.width}, height:#{f.height}}\n"
+      "[#{@app().pid}] #{@app().title()} : #{@title()}\n{x:#{f.x}, y:#{f.y}, width:#{f.width}, height:#{f.height}}\n"
 
 Sort any window collection by most recently with focus. We use
 `info()` as a way of identifying the windows in place. Not too
@@ -397,6 +397,8 @@ readable.
 
 ## Bindings
 
+### Keyboard Guide
+
 ![][1]
 
 Mash is **Cmd** + **Alt/Opt** + **Ctrl** pressed together.
@@ -486,4 +488,11 @@ Size the current window on the grid
 
 That's all folks.
 
-[1]:https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/8d6748acb5ac739c7a90692caeee3d971f34759d/phoenix.keyboard.png
+##### Quick reference, open the keyboard cheatsheet in a browser
+
+**Mash + /***
+
+    key_binding '/',     mash, ->
+      api.runCommand "/usr/bin/open", ["https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/phoenix.keyboard.png"]
+
+[1]:https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/phoenix.keyboard.png

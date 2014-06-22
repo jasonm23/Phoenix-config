@@ -13,6 +13,8 @@ class api
   static void reload(String path);
   static void launch(String appName);
   static void alert(String msg, double durationSeconds);
+  static void runCommand(String comamndPath, Array args); // Uses NSTask to run commands
+  static void setTint(Array red, Array green, Array blue);
 
 end
 
