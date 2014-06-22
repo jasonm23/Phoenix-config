@@ -490,7 +490,7 @@ That's all folks.
 
 ##### Quick reference, open the keyboard cheatsheet in a browser
 
-**Mash + /***
+**Mash + /**
 
     key_binding '/',     mash, ->
       api.runCommand "/usr/bin/open", ["https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/phoenix.keyboard.png"]
