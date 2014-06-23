@@ -488,11 +488,11 @@ Size the current window on the grid
 
 That's all folks.
 
-##### Quick reference, open the keyboard cheatsheet in a browser
+### Quick reference, open the keyboard cheatsheet in a browser
 
-**Mash + /**
+**Mash + `**
 
-    key_binding '/',     mash, ->
+    key_binding "`".trim(), mash, ->
       api.runCommand "/usr/bin/open", ["https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/phoenix.keyboard.png"]
 
 Note: `api.runCommand` is undocumented in the API ref, I've included
