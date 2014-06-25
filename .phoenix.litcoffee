@@ -40,7 +40,8 @@ We'll use a 20 second alert to show debug messages, +1 for a Phoenix REPL!
 
     MARGIN_X     = 3
     MARGIN_Y     = 3
-    GRID_WIDTH   = 3
+    GRID_WIDTH   = 2
+    GRID_HEIGHT  = 2
 
 ## Application config
 
@@ -49,7 +50,7 @@ We'll use a 20 second alert to show debug messages, +1 for a Phoenix REPL!
     TERMINAL     = "iTerm"
     FINDER       = "Finder"
     MUSIC        = "iTunes"
-    VIDEO        = "VLC"
+    VIDEO        = "MPlayerX"
 
 ## Layout config
 
@@ -97,13 +98,19 @@ Change grid by a width factor
       snapAllToGrid()
       return
 
+    changeGridHeight = (by_) ->
+      GRID_HEIGHT = Math.max(1, GRID_HEIGHT + by_)
+      api.alert "grid is now " + GRID_HEIGHT + " tiles high", 1
+      snapAllToGrid()
+      return
+
 Get the current grid as `{x:,y:,width:,height:}`
 
     Window::getGrid = ->
       winFrame = @frame()
       screenRect = @screen().frameWithoutDockOrMenu()
       thirdScreenWidth = screenRect.width / GRID_WIDTH
-      halfScreenHeight = screenRect.height / 2
+      halfScreenHeight = screenRect.height / GRID_HEIGHT
       x: Math.round((winFrame.x - screenRect.x) / thirdScreenWidth)
       y: Math.round((winFrame.y - screenRect.y) / halfScreenHeight)
       width: Math.max(1, Math.round(winFrame.width / thirdScreenWidth))
@@ -114,7 +121,7 @@ Set the current grid from an object `{x:,y:,width:,height:}`
     Window::setGrid = (grid, screen) ->
       screenRect = screen.frameWithoutDockOrMenu()
       thirdScreenWidth = screenRect.width / GRID_WIDTH
-      halfScreenHeight = screenRect.height / 2
+      halfScreenHeight = screenRect.height / GRID_HEIGHT
       newFrame =
         x: (grid.x * thirdScreenWidth) + screenRect.x
         y: (grid.y * halfScreenHeight) + screenRect.y
@@ -137,8 +144,8 @@ Calculate the grid based on the parameters, `x`, `y`, `width`, `height`, (return
       screen = @screen().frameWithoutDockOrMenu()
       x: Math.round(x * screen.width) + MARGIN_X + screen.x
       y: Math.round(y * screen.height) + MARGIN_Y + screen.y
-      width: Math.round(width * screen.width) - 2 * MARGIN_X
-      height: Math.round(height * screen.height) - 2 * MARGIN_Y
+      width: Math.round(width * screen.width) - 2.0 * MARGIN_X
+      height: Math.round(height * screen.height) - 2.0 * MARGIN_Y
 
 Window to grid
 
@@ -146,7 +153,6 @@ Window to grid
       rect = @calculateGrid(x, y, width, height)
       @setFrame rect
       this
-
 
 Window top right point
 
@@ -189,7 +195,7 @@ performant, but with collections of this size, it's not a problem.
       allVisible = Window.visibleWindowsMostRecentFirst()
       _.chain(windows)
       .sortBy (win)->
-        allVisible.map((w)-> w.info()).indexOf(win.info())
+        _.map(allVisible, (w)-> w.info()).indexOf(win.info())
       .value()
 
 ### Window moving and sizing
@@ -251,7 +257,7 @@ Move the current window by one column
       frame.x = Math.min(frame.x + 1, GRID_WIDTH - frame.width)
       win.setGrid frame, win.screen()
 
-Grow and shrink the current window by a single grid column
+Grow and shrink the current window by a single grid cell
 
     windowGrowOneGridColumn = ->
       win = Window.focusedWindow()
@@ -265,20 +271,30 @@ Grow and shrink the current window by a single grid column
       frame.width = Math.max(frame.width - 1, 1)
       win.setGrid frame, win.screen()
 
-Shift the current window to the bottom or top row
-
-    windowToBottomRow = ->
+    windowGrowOneGridRow = ->
       win = Window.focusedWindow()
       frame = win.getGrid()
-      frame.y = 1
-      frame.height = 1
+      frame.height = Math.min(frame.height + 1, GRID_HEIGHT)
       win.setGrid frame, win.screen()
 
-    windowToTopRow = ->
+    windowShrinkOneGridRow = ->
       win = Window.focusedWindow()
       frame = win.getGrid()
-      frame.y = 0
-      frame.height = 1
+      frame.height = Math.max(frame.height - 1, 1)
+      win.setGrid frame, win.screen()
+
+Shift the current window to the bottom or top row
+
+    windowDownOneRow = ->
+      win = Window.focusedWindow()
+      frame = win.getGrid()
+      frame.y = Math.min(Math.floor(frame.y + 1), GRID_HEIGHT - 1)
+      win.setGrid frame, win.screen()
+
+    windowUpOneRow = ->
+      win = Window.focusedWindow()
+      frame = win.getGrid()
+      frame.y = Math.max(Math.floor(frame.y - 1), 0)
       win.setGrid frame, win.screen()
 
 Expand the current window's height to vertically fill the screen
@@ -287,7 +303,7 @@ Expand the current window's height to vertically fill the screen
       win = Window.focusedWindow()
       frame = win.getGrid()
       frame.y = 0
-      frame.height = 2
+      frame.height = GRID_HEIGHT
       win.setGrid frame, win.screen()
 
 ### Transpose windows
@@ -436,7 +452,7 @@ Focus to direction
 
 Maximize the current window
 
-    key_binding 'M',     mash, -> Window.focusedWindow().toFullScreen()
+    key_binding 'space',     mash, -> Window.focusedWindow().toFullScreen()
 
 Switch to or lauch apps, as defined in the [Application config](#application-config)
 
@@ -467,6 +483,8 @@ Setting the grid size
 
     key_binding '=',     mash, -> changeGridWidth +1
     key_binding '-',     mash, -> changeGridWidth -1
+    key_binding '[',     mash, -> changeGridHeight +1
+    key_binding ']',     mash, -> changeGridHeight -1
 
 Snap current window or all windows to the grid
 
@@ -476,15 +494,18 @@ Snap current window or all windows to the grid
 Move the current window around the grid
 
     key_binding 'H',     mash, -> moveWindowLeftOneColumn()
-    key_binding 'K',     mash, -> windowToTopRow()
-    key_binding 'J',     mash, -> windowToBottomRow()
+    key_binding 'K',     mash, -> windowUpOneRow()
+    key_binding 'J',     mash, -> windowDownOneRow()
     key_binding 'L',     mash, -> moveWindowRightOneColumn()
 
 Size the current window on the grid
 
     key_binding 'U',     mash, -> windowToFullHeight()
+
     key_binding 'I',     mash, -> windowShrinkOneGridColumn()
     key_binding 'O',     mash, -> windowGrowOneGridColumn()
+    key_binding ',',     mash, -> windowShrinkOneGridRow()
+    key_binding '.',     mash, -> windowGrowOneGridRow()
 
 That's all folks.
 
