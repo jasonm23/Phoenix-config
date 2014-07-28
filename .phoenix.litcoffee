@@ -1,5 +1,7 @@
 # Phoenix.app config
 
+## Newsflash: Moved to https://github.com/jasonm23/Phoenix-config/
+
 ## Prologue
 
 This is a nice, fairly comprehensive, relatively self-documenting,
