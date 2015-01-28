@@ -422,7 +422,7 @@ Switch to a predefined layout [as above](#layout-config)
 Alias `api.bind` as `key_binding`, to make the binding table extra
 readable.
 
-    key_binding = (key, modifier, description, fn)->
+    key_binding = (key, description, modifier, fn)->
       # Description is just to keep the key binding metadata in the
       # method call so we can easily build the keyboard guide without
       # additional metadata elsewhere.  It would also be helpful for
