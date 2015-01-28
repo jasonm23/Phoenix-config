@@ -31,8 +31,6 @@ npm install -g coffee-script
 
 ## Debugging helpers
 
-We'll use a 20 second alert to show debug messages, +1 for a Phoenix REPL!
-
     debug = (message)->
       api.alert message, 10
 
@@ -222,16 +220,16 @@ Remember and forget frames
 
 Set a window to top / bottom / left / right
 
-    #                                  x:   y:   width: height:
-    Window::toTopHalf     = -> @toGrid 0,   0,   1,     0.5
-    Window::toBottomHalf  = -> @toGrid 0,   0.5, 1,     0.5
-    Window::toLeftHalf    = -> @toGrid 0,   0,   0.5,   1
-    Window::toRightHalf   = -> @toGrid 0.5, 0,   0.5,   1
-    #                                  x:   y:   width: height:
-    Window::toTopRight    = -> @toGrid 0.5, 0,   0.5,   0.5
-    Window::toBottomRight = -> @toGrid 0.5, 0.5, 0.5,   0.5
-    Window::toTopLeft     = -> @toGrid 0,   0,   0.5,   0.5
-    Window::toBottomLeft  = -> @toGrid 0,   0.5, 0.5,   0.5
+    #                                      x     y     width  height
+    Window::toTopHalf      =  ->  @toGrid  0,    0,    1,     0.5
+    Window::toBottomHalf   =  ->  @toGrid  0,    0.5,  1,     0.5
+    Window::toLeftHalf     =  ->  @toGrid  0,    0,    0.5,   1
+    Window::toRightHalf    =  ->  @toGrid  0.5,  0,    0.5,   1
+    #                                      x     y     width  height
+    Window::toTopRight     =  ->  @toGrid  0.5,  0,    0.5,   0.5
+    Window::toBottomRight  =  ->  @toGrid  0.5,  0.5,  0.5,   0.5
+    Window::toTopLeft      =  ->  @toGrid  0,    0,    0.5,   0.5
+    Window::toBottomLeft   =  ->  @toGrid  0,    0.5,  0.5,   0.5
 
 Move the current window to the next / previous screen
 
@@ -308,6 +306,11 @@ Expand the current window's height to vertically fill the screen
 
 ### Transpose windows
 
+This implementation is somewhat flawed, but this is by nature, due to
+it's rather uncommon use.  If it were more frequently executed, I'm
+sure it would be more fully formed, and sufficiently functional.
+Perhaps, also, I should read less Ambrose Bierce.
+
     transposeWindows = (swapFrame = true, switchFocus = true)->
       win = Window.focusedWindow()
       left = win.toRight()
@@ -341,7 +344,8 @@ Select the first window for an app
 
     App::firstWindow = -> @visibleWindows()[0]
 
-Find an app by it's `title`
+Find an app by it's `title` - this is problematic when the App window
+has no title bar. Fair warning.
 
     App.byTitle = (title) ->
       apps = @runningApps()
@@ -417,7 +421,7 @@ readable.
 
 ![][1]
 
-Mash is **Cmd** + **Alt/Opt** + **Ctrl** pressed together.
+Mash is <kbd>Cmd</kdb> + <kbd>Alt/Opt</kbd> + <kbd>Ctrl</kbd> pressed together.
 
     mash = 'cmd+alt+ctrl'.split '+'
 
