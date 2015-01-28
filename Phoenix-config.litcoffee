@@ -230,12 +230,12 @@ Remember and forget frames
 
 Set a window to top / bottom / left / right
 
-    #                                      x     y     width  height
+    #                                      X     Y     Width  Height
     Window::toTopHalf      =  ->  @toGrid  0,    0,    1,     0.5
     Window::toBottomHalf   =  ->  @toGrid  0,    0.5,  1,     0.5
     Window::toLeftHalf     =  ->  @toGrid  0,    0,    0.5,   1
     Window::toRightHalf    =  ->  @toGrid  0.5,  0,    0.5,   1
-    #                                      x     y     width  height
+    #                                      X     Y     Width  Height
     Window::toTopRight     =  ->  @toGrid  0.5,  0,    0.5,   0.5
     Window::toBottomRight  =  ->  @toGrid  0.5,  0.5,  0.5,   0.5
     Window::toTopLeft      =  ->  @toGrid  0,    0,    0.5,   0.5
