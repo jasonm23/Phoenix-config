@@ -422,7 +422,11 @@ Switch to a predefined layout [as above](#layout-config)
 Alias `api.bind` as `key_binding`, to make the binding table extra
 readable.
 
-    key_binding = (key, modifier, fn)->
+    key_binding = (key, modifier, description, fn)->
+      # Description is just to keep the key binding metadata in the
+      # method call so we can easily build the keyboard guide without
+      # additional metadata elsewhere.  It would also be helpful for
+      # doing things like a describe-key command.
       api.bind key, modifier, fn
 
 ## Bindings
@@ -437,89 +441,87 @@ Mash is <kbd>Cmd</kbd> + <kbd>Alt/Opt</kbd> + <kbd>Ctrl</kbd> pressed together.
 
 Transpose/Swap Windows
 
-    # Transpose
-    key_binding "T",     mash, -> transposeWindows(true, false)
-    # Transpose and switch focus
-    key_binding "Y",     mash, -> transposeWindows(true, true)
+    key_binding 'T', 'Transpose windows',                     mash, -> transposeWindows(true, false)
+    key_binding 'Y', 'Transpose windows and swap focus',      mash, -> transposeWindows(true, true)
 
 Move the current window to the top / bottom / left / right half of the screen
 and fill it.
 
-    key_binding 'up',    mash, -> Window.focusedWindow().toTopHalf()
-    key_binding 'down',  mash, -> Window.focusedWindow().toBottomHalf()
-    key_binding 'left',  mash, -> Window.focusedWindow().toLeftHalf()
-    key_binding 'right', mash, -> Window.focusedWindow().toRightHalf()
+    key_binding 'up',    'Move window top half',              mash, -> Window.focusedWindow().toTopHalf()
+    key_binding 'down',  'Move window bottom half',           mash, -> Window.focusedWindow().toBottomHalf()
+    key_binding 'left',  'Move window left half',             mash, -> Window.focusedWindow().toLeftHalf()
+    key_binding 'right', 'Move window right half',            mash, -> Window.focusedWindow().toRightHalf()
 
 Move to the corners of the screen
 
-    key_binding 'Q',     mash, -> Window.focusedWindow().toTopLeft()
-    key_binding 'A',     mash, -> Window.focusedWindow().toBottomLeft()
-    key_binding 'W',     mash, -> Window.focusedWindow().toTopRight()
-    key_binding 'S',     mash, -> Window.focusedWindow().toBottomRight()
+    key_binding 'Q', 'Move window to top left corner',        mash, -> Window.focusedWindow().toTopLeft()
+    key_binding 'A', 'Move window to bottom left corner',     mash, -> Window.focusedWindow().toBottomLeft()
+    key_binding 'W', 'Move window to top right corner',       mash, -> Window.focusedWindow().toTopRight()
+    key_binding 'S', 'Move window to bottom right corner',    mash, -> Window.focusedWindow().toBottomRight()
 
 Focus to direction
 
-    key_binding 'R',     mash, -> Window.focusedWindow().focusWindowUp()
-    key_binding 'D',     mash, -> Window.focusedWindow().focusWindowLeft()
-    key_binding 'F',     mash, -> Window.focusedWindow().focusWindowRight()
-    key_binding 'C',     mash, -> Window.focusedWindow().focusWindowDown()
+    key_binding 'R', 'Shift focus to window above',           mash, -> Window.focusedWindow().focusWindowUp()
+    key_binding 'D', 'Shift focus to window left',            mash, -> Window.focusedWindow().focusWindowLeft()
+    key_binding 'F', 'Shift focus to window right',           mash, -> Window.focusedWindow().focusWindowRight()
+    key_binding 'C', 'Shift focus to window below',           mash, -> Window.focusedWindow().focusWindowDown()
 
 Maximize the current window
 
-    key_binding 'space',     mash, -> Window.focusedWindow().toFullScreen()
+    key_binding 'space', 'Maximize (toggle revert size)',     mash, -> Window.focusedWindow().toFullScreen()
 
 Switch to or lauch apps, as defined in the [Application config](#application-config)
 
-    key_binding '0',     mash, -> App.focusOrStart EDITOR
-    key_binding '9',     mash, -> App.focusOrStart TERMINAL
-    key_binding '8',     mash, -> App.focusOrStart BROWSER
-    key_binding '7',     mash, -> App.focusOrStart FINDER
+    key_binding '0', 'Start/Switch to Editor',                mash, -> App.focusOrStart EDITOR
+    key_binding '9', 'Start/Switch to Terminal',              mash, -> App.focusOrStart TERMINAL
+    key_binding '8', 'Start/Switch to Browser',               mash, -> App.focusOrStart BROWSER
+    key_binding '7', 'Start/Switch to Finder',                mash, -> App.focusOrStart FINDER
 
     # Entertainment apps...
 
-    key_binding 'V',     mash, -> App.focusOrStart VIDEO
-    key_binding 'B',     mash, -> App.focusOrStart MUSIC
+    key_binding 'V', 'Start/Switch to Video Player',          mash, -> App.focusOrStart VIDEO
+    key_binding 'B', 'Start/Switch to Music Player',          mash, -> App.focusOrStart MUSIC
 
 Switch layouts using the predefined [Layout config](#layout-config)
 
-    key_binding '5',     mash, -> switchLayout 'Editor and Browser'
-    key_binding '4',     mash, -> switchLayout 'Editor and Terminal'
-    key_binding '3',     mash, -> switchLayout 'Terminal and Browser'
-    key_binding '2',     mash, -> switchLayout 'Finder and Terminal'
-    key_binding '1',     mash, -> switchLayout 'Finder and Browser'
+    key_binding '5', 'Change to Editor and Browser layout',   mash, -> switchLayout 'Editor and Browser'
+    key_binding '4', 'Change to Editor and Terminal layout',  mash, -> switchLayout 'Editor and Terminal'
+    key_binding '3', 'Change to Terminal and Browser layout', mash, -> switchLayout 'Terminal and Browser'
+    key_binding '2', 'Change to Finder and Terminal layout',  mash, -> switchLayout 'Finder and Terminal'
+    key_binding '1', 'Change to Finder and Browser layout',   mash, -> switchLayout 'Finder and Browser'
 
 Move window between screens
 
-    key_binding 'N',     mash, -> moveWindowToNextScreen()
-    key_binding 'P',     mash, -> moveWindowToPreviousScreen()
+    key_binding 'N', 'Move window to the next screen',        mash, -> moveWindowToNextScreen()
+    key_binding 'P', 'Move window to the previous screen',    mash, -> moveWindowToPreviousScreen()
 
 Setting the grid size
 
-    key_binding '=',     mash, -> changeGridWidth +1
-    key_binding '-',     mash, -> changeGridWidth -1
-    key_binding '[',     mash, -> changeGridHeight +1
-    key_binding ']',     mash, -> changeGridHeight -1
+    key_binding '=', 'Increase grid width',                   mash, -> changeGridWidth +1
+    key_binding '-', 'Reduce grid width',                     mash, -> changeGridWidth -1
+    key_binding '[', 'Increase grid height',                  mash, -> changeGridHeight +1
+    key_binding ']', 'Reduce grid height',                    mash, -> changeGridHeight -1
 
 Snap current window or all windows to the grid
 
-    key_binding ';',     mash, -> Window.focusedWindow().snapToGrid()
-    key_binding "'",     mash, -> Window.visibleWindows().map (win)-> win.snapToGrid()
+    key_binding ';', 'Snap to grid',                          mash, -> Window.focusedWindow().snapToGrid()
+    key_binding "'", 'Snap all to grid',                      mash, -> Window.visibleWindows().map (win)-> win.snapToGrid()
 
 Move the current window around the grid
 
-    key_binding 'H',     mash, -> moveWindowLeftOneColumn()
-    key_binding 'K',     mash, -> windowUpOneRow()
-    key_binding 'J',     mash, -> windowDownOneRow()
-    key_binding 'L',     mash, -> moveWindowRightOneColumn()
+    key_binding 'H', 'Move window left',                      mash, -> moveWindowLeftOneColumn()
+    key_binding 'J', 'Move window down',                      mash, -> windowDownOneRow()
+    key_binding 'K', 'Move window up',                        mash, -> windowUpOneRow()
+    key_binding 'L', 'Move window right',                     mash, -> moveWindowRightOneColumn()
 
 Size the current window on the grid
 
-    key_binding 'U',     mash, -> windowToFullHeight()
+    key_binding 'U', 'Size window to full height',            mash, -> windowToFullHeight()
 
-    key_binding 'I',     mash, -> windowShrinkOneGridColumn()
-    key_binding 'O',     mash, -> windowGrowOneGridColumn()
-    key_binding ',',     mash, -> windowShrinkOneGridRow()
-    key_binding '.',     mash, -> windowGrowOneGridRow()
+    key_binding 'I', 'Resize window one grid column smaller', mash, -> windowShrinkOneGridColumn()
+    key_binding 'O', 'Resize window one grid column larger',  mash, -> windowGrowOneGridColumn()
+    key_binding ',', 'Resize window one grid row smaller',    mash, -> windowShrinkOneGridRow()
+    key_binding '.', 'Resize window one grid row larger',     mash, -> windowGrowOneGridRow()
 
 That's all folks.
 
@@ -527,7 +529,7 @@ That's all folks.
 
 **Mash + `**
 
-    key_binding "`", mash, -> # mash backtick
+    key_binding "`", 'Open quick reference guide',            mash, -> # mash backtick
       api.runCommand "/usr/bin/open", ["https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/phoenix.keyboard.png"]
 
 Note: `api.runCommand` is undocumented in the API ref, I've included
