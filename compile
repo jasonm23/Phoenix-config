@@ -1,3 +1,0 @@
-#!/bin/sh
-
-coffee --bare --compile --literate -o ~/ .phoenix.litcoffee
