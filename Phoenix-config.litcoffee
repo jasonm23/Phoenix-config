@@ -50,43 +50,8 @@ couple of command line tools installed, right?)
 
     MARGIN_X     = 3
     MARGIN_Y     = 3
-    GRID_WIDTH   = 2
-    GRID_HEIGHT  = 2
-
-## Application config
-
-    EDITOR       = "Emacs"
-    BROWSER      = "Google Chrome"
-    TERMINAL     = "iTerm"
-    FINDER       = "Finder"
-    MUSIC        = "iTunes"
-    VIDEO        = "MPlayerX"
-
-## Layout config
-
-A few helpful app layouts. **note:** The last app in a layout array
-will get focus.
-
-    layouts =
-      "Editor and Browser":
-        0: app: BROWSER,  whereTo: "toRightHalf"
-        1: app: EDITOR,   whereTo: "toLeftHalf"
-
-      "Editor and Terminal":
-        0: app: TERMINAL, whereTo: "toRightHalf"
-        1: app: EDITOR,   whereTo: "toLeftHalf"
-
-      "Terminal and Browser":
-        0: app: TERMINAL, whereTo: "toLeftHalf"
-        1: app: BROWSER,  whereTo: "toRightHalf"
-
-      "Finder and Terminal":
-        0: app: TERMINAL, whereTo: "toRightHalf"
-        1: app: FINDER,   whereTo: "toLeftHalf"
-
-      "Finder and Browser":
-        0: app: BROWSER,  whereTo: "toRightHalf"
-        1: app: FINDER,   whereTo: "toLeftHalf"
+    GRID_WIDTH   = 20
+    GRID_HEIGHT  = 16
 
 ## Methods
 
@@ -409,16 +374,6 @@ Run the given function `fn` for an app with `title`
       app = App.byTitle(title)
       _.each app.visibleWindows(), fn  if app
 
-### Manage layouts
-
-Switch to a predefined layout [as above](#layout-config)
-
-    switchLayout = (name)->
-      _.each layouts[name], (config)->
-        App.focusOrStart config.app
-        app = App.byTitle config.app
-        app.firstWindow()[config.whereTo]()
-
 ### Binding alias
 
 Alias `api.bind` as `key_binding`, to make the binding table extra
@@ -433,18 +388,9 @@ readable.
 
 ## Bindings
 
-### Keyboard Guide
-
-![][1]
-
 Mash is <kbd>Cmd</kbd> + <kbd>Alt/Opt</kbd> + <kbd>Ctrl</kbd> pressed together.
 
     mash = 'cmd+alt+ctrl'.split '+'
-
-Transpose/Swap Windows
-
-    key_binding 'T', 'Transpose windows',          mash, -> transposeWindows(true, false)
-    key_binding 'Y', 'Transpose and Switch Focus', mash, -> transposeWindows(true, true)
 
 Move the current window to the top / bottom / left / right half of the screen
 and fill it.
@@ -461,36 +407,26 @@ Move to the corners of the screen
     key_binding 'W', 'Top Right',                  mash, -> Window.focusedWindow().toTopRight()
     key_binding 'S', 'Bottom Right',               mash, -> Window.focusedWindow().toBottomRight()
 
-Move window focus in a given direction
-
-    key_binding 'R', 'Focus to Above',             mash, -> Window.focusedWindow().focusWindowUp()
-    key_binding 'D', 'Focus to Left',              mash, -> Window.focusedWindow().focusWindowLeft()
-    key_binding 'F', 'Focus to Right',             mash, -> Window.focusedWindow().focusWindowRight()
-    key_binding 'C', 'Focus to Below',             mash, -> Window.focusedWindow().focusWindowDown()
-
-Maximize the current window
+Toggle maximize for the current window
 
     key_binding 'space', 'Maximize Window',        mash, -> Window.focusedWindow().toFullScreen()
 
-Switch to or lauch apps, as defined in the [Application config](#application-config)
+## Application config
 
-    key_binding '0', 'Launch Editor',              mash, -> App.focusOrStart EDITOR
-    key_binding '9', 'Launch Terminal',            mash, -> App.focusOrStart TERMINAL
-    key_binding '8', 'Launch Browser',             mash, -> App.focusOrStart BROWSER
-    key_binding '7', 'Launch Finder',              mash, -> App.focusOrStart FINDER
+    ITERM    = "iTerm2"
+    VIM      = "MacVim"
+    EMACS    = "Emacs"
+    CHROME   = "Google Chrome"
+    TERMINAL = "iTerm2"
+    FINDER   = "Finder"
 
-    # Entertainment apps...
+Switch to or lauch apps
 
-    key_binding 'V', 'Launch Video App',           mash, -> App.focusOrStart VIDEO
-    key_binding 'B', 'Launch Music App',           mash, -> App.focusOrStart MUSIC
-
-Switch layouts using the predefined [Layout config](#layout-config)
-
-    key_binding '1', 'Finder and Browser',         mash, -> switchLayout 'Finder and Browser'
-    key_binding '2', 'Finder and Terminal',        mash, -> switchLayout 'Finder and Terminal'
-    key_binding '3', 'Terminal and Browser',       mash, -> switchLayout 'Terminal and Browser'
-    key_binding '4', 'Editor and Terminal',        mash, -> switchLayout 'Editor and Terminal'
-    key_binding '5', 'Editor and Browser',         mash, -> switchLayout 'Editor and Browser'
+    key_binding 'E', 'Launch Emacs',               mash, -> App.focusOrStart EMACS
+    key_binding 'V', 'Launch Vim',                 mash, -> App.focusOrStart VIM
+    key_binding 'T', 'Launch iTerm2',              mash, -> App.focusOrStart ITERM
+    key_binding 'C', 'Launch Chrome',              mash, -> App.focusOrStart CHROME
+    key_binding 'F', 'Launch Finder',              mash, -> App.focusOrStart FINDER
 
 Move window between screens
 
@@ -519,22 +455,10 @@ Move the current window around the grid
 Size the current window on the grid
 
     key_binding 'U', 'Window Full Height',         mash, -> windowToFullHeight()
-
     key_binding 'I', 'Shrink by One Column',       mash, -> windowShrinkOneGridColumn()
     key_binding 'O', 'Grow by One Column',         mash, -> windowGrowOneGridColumn()
     key_binding ',', 'Shrink by One Row',          mash, -> windowShrinkOneGridRow()
     key_binding '.', 'Grow by One Row',            mash, -> windowGrowOneGridRow()
 
-That's all folks.
-
-### Quick reference, open the keyboard cheatsheet in a browser
-
-**Mash + `**
-
-    key_binding "`", 'Open keyboard guide',        mash, -> # mash backtick
-      api.runCommand "/usr/bin/open", ["https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/phoenix.keyboard.png"]
-
 Note: `api.runCommand` is undocumented in the API ref, I've included
 the method signature in the API ref in this gist.
-
-[1]:https://gist.githubusercontent.com/jasonm23/4990cc1e02a3c2a8e159/raw/phoenix.keyboard.png
