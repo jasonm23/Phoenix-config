@@ -416,8 +416,8 @@ Toggle maximize for the current window
     ITERM    = "iTerm2"
     VIM      = "MacVim"
     EMACS    = "Emacs"
-    CHROME   = "Google Chrome"
     TERMINAL = "iTerm2"
+    CHROME   = "ChromeLauncher"
     FINDER   = "Finder"
 
 Switch to or lauch apps
