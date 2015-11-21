@@ -1,5 +1,5 @@
 #!/usr/local/bin/coffee -bcpl
-# -*- mode: litcoffee -*- <= For Emacs to switch mode to Literate CoffeeScript
+# -*- mode: litcoffee -*-
 
 # Phoenix.app config
 
