@@ -1,4 +1,4 @@
-#!/usr/local/bin/coffee -bcpl
+#! PATH=/usr/local/bin:$PATH coffee -bcpl
 # -*- mode: litcoffee -*-
 
 # Phoenix.app config
