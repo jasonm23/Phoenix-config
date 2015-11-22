@@ -21,18 +21,34 @@ You will need XCode command line tools installed.
 git clone https://github.com/kasper/phoenix
 cd phoenix
 git checkout 2.0
-xcodebuild
+xcodebuild clean build
+```
+
+Now (re)place the Phoenix app into `/Applications/`
+
+```bash
 cd build/Release/
+rm -rf /Applications/Phoenix.app
 mv Phoenix.app /Applications/
-cd ~
+```
+
+Install this Phoenix config...
+
+```bash
+cd
 git clone git@github.com:opsmanager/Phoenix-config
 cd Phoenix-config
 make
+
 open -a Phoenix
 ```
 
 You'll need to enable the security / accessibility settings (a pop up will
 tell you this on first start.) Phoenix will then need to be run again.
+
+```bash
+open -a Phoenix
+```
 
 Now is a good time to activate **Open at Login** on the Phoenix OS X
 menu item, if you like.
@@ -51,7 +67,9 @@ I assume you know what you're doing, if not, I wish you luck on your
 diligent googling. (let's face it you got this far, you can get a
 couple of command line tools installed, right?)
 
-## Config begins here
+... If you need a hint, install `node` and `npm` first.
+
+## The Config proper begins here...
 
     Phoenix.notify "Phoenix config loading"
 
@@ -80,13 +98,10 @@ couple of command line tools installed, right?)
 
     focused = -> Window.focusedWindow()
     windows = -> Window.visibleWindows()
-    Window::screenRect = -> @screen().frameInRectangle()
 
-    Window::fullGridFrame = ->
-      frame = @calculateGrid y: 0, x: 0, width: 1, height: 1
-      frame.y = Math.max 20 + MARGIN_Y
-      frame.height = (frame.height - 21)
-      frame
+    Window::screenRect = -> @screen().visibleFrameInRectangle()
+
+    Window::fullGridFrame = -> @calculateGrid y: 0, x: 0, width: 1, height: 1
 
 ### Window Grid
 
