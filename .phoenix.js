@@ -22,18 +22,19 @@ git clone https://github.com/kasper/phoenix
 cd phoenix
 git checkout 2.0
 xcodebuild
-open build/Release
+cd build/Release/
+mv Phoenix.app /Applications/
+cd ~
+git clone git@github.com:opsmanager/Phoenix-config
+cd Phoenix-config
+make
+open -a Phoenix
 ```
 
-Then Copy this file to `~/.phoenix.js`
+You'll need to enable the security / accessibility settings (a pop up will
+tell you this on first start.) Phoenix will then need to be run again.
 
-Now drab and drop Phoenix into `/Applications/` and start it. You'll
-need to enable the security / accessibility settings (a pop up will
-tell you this on first start.)
-
-Phoenix will need to be run again.
-
-Also now is a good time to activate **Open at Login** on the Phoenix OS X
+Now is a good time to activate **Open at Login** on the Phoenix OS X
 menu item, if you like.
 
 ### Install CoffeeScript
