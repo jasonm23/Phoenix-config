@@ -1,1 +1,1 @@
-/Users/jason/Phoenix-config/.phoenix.js
+[-> Jump to .phoenix.js (literate coffeescript)](.phoenix.js)
