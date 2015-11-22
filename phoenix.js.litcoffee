@@ -82,6 +82,12 @@ couple of command line tools installed, right?)
     windows = -> Window.visibleWindows()
     Window::screenRect = -> @screen().frameInRectangle()
 
+    Window::fullGridFrame = ->
+      frame = @calculateGrid y: 0, x: 0, width: 1, height: 1
+      frame.y = Math.max 20 + MARGIN_Y
+      frame.height = (frame.height - 21)
+      frame
+
 ### Window Grid
 
 Snap all windows to grid layout
@@ -108,8 +114,8 @@ Get the current grid as `{x:, y:, width:, height:}`
       gridWidth = @screenRect().width / GRID_WIDTH
       gridHeight = @screenRect().height / GRID_HEIGHT
 
-      x: Math.round (frame.x - @screenRect().x) / gridWidth
       y: Math.round (frame.y - @screenRect().y) / gridHeight
+      x: Math.round (frame.x - @screenRect().x) / gridWidth
       width: Math.max 1, Math.round frame.width / gridWidth
       height: Math.max 1, Math.round frame.height / gridHeight
 
@@ -120,8 +126,8 @@ Set the current grid from an object `{x:, y:, width:, height:}`
       gridHeight = @screenRect().height / GRID_HEIGHT
 
       @setFrame
-        x: ((grid.x * gridWidth) + @screenRect().x) + MARGIN_X
         y: ((grid.y * gridHeight) + @screenRect().y) + MARGIN_Y
+        x: ((grid.x * gridWidth) + @screenRect().x) + MARGIN_X
         width: (grid.width * gridWidth) - (MARGIN_X * 2.0)
         height: (grid.height * gridHeight) - (MARGIN_Y * 2.0)
 
@@ -133,9 +139,9 @@ Snap the current window to the grid
 Calculate the grid based on the parameters, `x`, `y`, `width`, `height`, (returning an object `{x:,y:,width:,height:}`)
 
     Window::calculateGrid = ({x, y, width, height}) ->
-      x: Math.round(x * @screenRect().width) + MARGIN_X + @screenRect().x
-      y: Math.round(y * @screenRect().height) + MARGIN_Y + @screenRect().y
-      width: Math.round(width * @screenRect().width) - 2.0 * MARGIN_X
+      y:      Math.round(y * @screenRect().height) + MARGIN_Y + @screenRect().y
+      x:      Math.round(x * @screenRect().width) + MARGIN_X + @screenRect().x
+      width:  Math.round(width * @screenRect().width) - 2.0 * MARGIN_X
       height: Math.round(height * @screenRect().height) - 2.0 * MARGIN_Y
 
 Window to grid
@@ -188,18 +194,22 @@ Temporary storage for frames
 Set a window to full screen
 
     Window::toFullScreen = ->
-      fullFrame = @calculateGrid 0, 0, 1, 1
-      unless _.isEqual @frame(), fullFrame
+      unless _.isEqual @frame(), @fullGridFrame()
         @rememberFrame()
-        @toGrid 0, 0, 1, 1
-      else if lastFrames[this]
-        @setFrame lastFrames[this]
+        @toGrid
+          y: 0
+          x: 0
+          width: 1
+          height: 1
+      else if lastFrames[@uid()]
+        @setFrame lastFrames[@uid()]
         @forgetFrame()
 
 Remember and forget frames
 
-    Window::rememberFrame = -> lastFrames[this] = @frame()
-    Window::forgetFrame = -> delete lastFrames[this]
+    Window::uid           = -> "#{@app().name()}::#{@title()}"
+    Window::rememberFrame = -> lastFrames[@uid()] = @frame()
+    Window::forgetFrame   = -> delete lastFrames[@uid()]
 
 Set a window to top / bottom / left / right
 
@@ -301,15 +311,11 @@ Focus or start an app with `name`
         App.launch name
       else
         Phoenix.notify "Switching to #{name}"
-
       windows = _.flatmap apps, (x) -> x.windows()
-
       activeWindows = _.reject windows, (win) -> win.isMinimized()
-
       if _.isEmpty(activeWindows)
         App.launch name
-
-      activeWindows.forEach (win) -> win.focus()
+      _.each activeWindows, (win) -> win.focus()
 
 ### Binding alias
 
@@ -321,8 +327,7 @@ readable.
 The `key_binding` method includes the unused `description` parameter,
 This is to allow future functionality ie. help mechanisms, describe bindings etc.
 
-    key_binding = (key, description, modifier, fn)->
-      keys.push Phoenix.bind(key, modifier, fn)
+    key_binding = (key, description, modifier, fn)-> keys.push Phoenix.bind(key, modifier, fn)
 
 ## Bindings
 
@@ -351,14 +356,20 @@ Toggle maximize for the current window
 
 ## Application config
 
+Replace these with apps that you want...
+
     ITERM    = "iTerm2"
     VIM      = "MacVim"
     EMACS    = "Emacs"
     TERMINAL = "iTerm2"
-    CHROME   = "ChromeLauncher"
     FINDER   = "Finder"
 
-Switch to or lauch apps
+We use an automator app to launch Chrome in remote-debugging-mode (on
+port 9222). You may not like or want this
+
+    CHROME   = "ChromeLauncher"
+
+Switch to or lauch apps - fix these up to use whatever Apps you want on speed dial.
 
     key_binding 'E', 'Launch Emacs',            mash, -> App.focusOrStart EMACS
     key_binding 'V', 'Launch Vim',              mash, -> App.focusOrStart VIM
@@ -398,6 +409,6 @@ Size the current window on the grid
     key_binding ',', 'Shrink by One Row',       mash, -> windowShrinkOneGridRow()
     key_binding '.', 'Grow by One Row',         mash, -> windowGrowOneGridRow()
 
-The end...
+All done...
 
     Phoenix.notify "Loaded"
