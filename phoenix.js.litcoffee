@@ -159,6 +159,13 @@ Calculate the grid based on the parameters, `x`, `y`, `width`, `height`, (return
       width:  Math.round(width * @screenRect().width) - 2.0 * MARGIN_X
       height: Math.round(height * @screenRect().height) - 2.0 * MARGIN_Y
 
+Window left half width
+
+    Window::proportionWidth = () ->
+      s_w = @screenRect().width
+      w_w = @frame().width
+      Math.round((w_w/s_w)*10)/10
+
 Window to grid
 
     Window::toGrid = ({x, y, width, height}) ->
@@ -226,12 +233,26 @@ Remember and forget frames
     Window::rememberFrame = -> lastFrames[@uid()] = @frame()
     Window::forgetFrame   = -> delete lastFrames[@uid()]
 
+Toggle left side width
+
+    Window::togglingWidth = ->
+      debug(@proportionWidth(), "...:")
+      switch @proportionWidth()
+        when 0.8 then 0.5
+        when 0.5 then 0.3
+        else 0.8
+
+Toggle right side width
+
 Set a window to top / bottom / left / right
 
     Window::toTopHalf     = -> @toGrid x:0,   y:0,   width:1,    height:0.5
     Window::toBottomHalf  = -> @toGrid x:0,   y:0.5, width:1,    height:0.5
-    Window::toLeftHalf    = -> @toGrid x:0,   y:0,   width:0.5,  height:1
-    Window::toRightHalf   = -> @toGrid x:0.5, y:0,   width:0.5,  height:1
+    Window::toLeftHalf    = -> @toGrid x:0,   y:0,   width: 0.5, height:1
+    Window::toRightHalf   = -> @toGrid x:0.5, y:0,   width: 0.5, height:1
+
+    Window::toLeftToggle  = -> @toGrid x:0,   y:0,   width: @togglingWidth(), height:1
+    Window::toRightToggle = -> @toGrid x: 1 - @togglingWidth(), y:0,   width: @togglingWidth(), height:1
 
     Window::toTopRight    = -> @toGrid x:0.5, y:0,   width:0.5,  height:0.5
     Window::toBottomRight = -> @toGrid x:0.5, y:0.5, width:0.5,  height:0.5
@@ -353,10 +374,10 @@ Mash is <kbd>Cmd</kbd> + <kbd>Alt/Opt</kbd> + <kbd>Ctrl</kbd> pressed together.
 Move the current window to the top / bottom / left / right half of the screen
 and fill it.
 
-    key_binding 'up',    'To Top Half',         mash, -> Window.focusedWindow().toTopHalf()
-    key_binding 'down',  'To Bottom Half',      mash, -> Window.focusedWindow().toBottomHalf()
-    key_binding 'left',  'To Left Half',        mash, -> Window.focusedWindow().toLeftHalf()
-    key_binding 'right', 'To Right Half',       mash, -> Window.focusedWindow().toRightHalf()
+    key_binding 'up',    'Top Half',            mash, -> Window.focusedWindow().toTopHalf()
+    key_binding 'down',  'Bottom Half',         mash, -> Window.focusedWindow().toBottomHalf()
+    key_binding 'left',  'Left side toggle',    mash, -> Window.focusedWindow().toLeftToggle()
+    key_binding 'right', 'Right side toggle',   mash, -> Window.focusedWindow().toRightToggle()
 
 Move to the corners of the screen
 
