@@ -236,7 +236,6 @@ Remember and forget frames
 Toggle left side width
 
     Window::togglingWidth = ->
-      debug(@proportionWidth(), "...:")
       switch @proportionWidth()
         when 0.8 then 0.5
         when 0.5 then 0.3
