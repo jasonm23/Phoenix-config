@@ -6,7 +6,7 @@
 ## Prologue
 
 This is a nice, fairly comprehensive, relatively self-documenting,
-configuration for [Phoenix 2](https://github.com/kasper/phoenix/tree/2.0),
+configuration for [Phoenix 2.2](https://github.com/kasper/phoenix/tree/2.2.1),
 a lightweight scriptable OS X window manager.
 
 ## [Jump straight to the bindings](#bindings)
@@ -76,7 +76,7 @@ couple of command line tools installed, right?)
 ## Debugging helpers
 
     debug = (o, label="obj: ")->
-      Phoenix.log label
+      Phoenix.log "debug: #{label} =>"
       Phoenix.log JSON.stringify(o)
 
 ## Basic Settings
@@ -96,8 +96,8 @@ couple of command line tools installed, right?)
 
 ### Helpers
 
-    focused = -> Window.focusedWindow()
-    windows = -> Window.visibleWindows()
+    focused = -> Window.focused()
+    windows = -> Window.windows { visible: true }
 
     Window::screenRect = -> @screen().visibleFrameInRectangle()
 
@@ -182,13 +182,13 @@ Window top right point
 Windows on the left
 
     Window::toLeft = ->
-      _.filter @windowsToWest(), (win)->
+      _.filter @neighbors('west'), (win)->
         win.topLeft().x < @topLeft().x - 10
 
 Windows on the right
 
     Window::toRight = ->
-      _.filter @windowsToEast(), (win) ->
+      _.filter @neighbors('east'), (win) ->
         win.topRight().x > @topRight().x + 10
 
 ### Window information
@@ -196,16 +196,6 @@ Windows on the right
     Window::info = ->
       f = @frame()
       "[#{@app().processIdentifier()}] #{@app().name()} : #{@title()}\n{x:#{f.x}, y:#{f.y}, width:#{f.width}, height:#{f.height}}\n"
-
-Sort any window collection by most recently with focus. We use
-`info()` as a way of identifying the windows in place. Not too
-performant, but with collections of this size, it's not a problem.
-
-    Window.sortByMostRecent = (windows)->
-      allVisible = visibleInOrder()
-      _.sortBy windows, (win)->
-        _.map(allVisible, (w)->
-          w.info()).indexOf win.info()
 
 ### Window moving and sizing
 
@@ -322,7 +312,7 @@ Expand the current window's height to vertically fill the screen
 
 Select the first window for an app
 
-    App::firstWindow = -> @visibleWindows()[0]
+    App::firstWindow = -> @all({visible: true})[0]
 
 Find an app by it's `name` - this is problematic when the App window
 has no title bar. Fair warning.
@@ -330,7 +320,7 @@ has no title bar. Fair warning.
 Find all apps with `name`
 
     App.allWithName = (name) ->
-      _.filter App.runningApps(), (app) -> app.name() is name
+      _.filter App.all(), (app) -> app.name() is name
 
     App.byName = (name) ->
       app = _.first App.allWithName name
@@ -362,7 +352,7 @@ readable.
 The `key_binding` method includes the unused `description` parameter,
 This is to allow future functionality ie. help mechanisms, describe bindings etc.
 
-    key_binding = (key, description, modifier, fn)-> keys.push Phoenix.bind(key, modifier, fn)
+    key_binding = (key, description, modifier, fn)-> keys.push Key.on(key, modifier, fn)
 
 ## Bindings
 
@@ -373,21 +363,21 @@ Mash is <kbd>Cmd</kbd> + <kbd>Alt/Opt</kbd> + <kbd>Ctrl</kbd> pressed together.
 Move the current window to the top / bottom / left / right half of the screen
 and fill it.
 
-    key_binding 'up',    'Top Half',            mash, -> Window.focusedWindow().toTopHalf()
-    key_binding 'down',  'Bottom Half',         mash, -> Window.focusedWindow().toBottomHalf()
-    key_binding 'left',  'Left side toggle',    mash, -> Window.focusedWindow().toLeftToggle()
-    key_binding 'right', 'Right side toggle',   mash, -> Window.focusedWindow().toRightToggle()
+    key_binding 'up',    'Top Half',            mash, -> Window.focused().toTopHalf()
+    key_binding 'down',  'Bottom Half',         mash, -> Window.focused().toBottomHalf()
+    key_binding 'left',  'Left side toggle',    mash, -> Window.focused().toLeftToggle()
+    key_binding 'right', 'Right side toggle',   mash, -> Window.focused().toRightToggle()
 
 Move to the corners of the screen
 
-    key_binding 'Q', 'Top Left',                mash, -> Window.focusedWindow().toTopLeft()
-    key_binding 'A', 'Bottom Left',             mash, -> Window.focusedWindow().toBottomLeft()
-    key_binding 'W', 'Top Right',               mash, -> Window.focusedWindow().toTopRight()
-    key_binding 'S', 'Bottom Right',            mash, -> Window.focusedWindow().toBottomRight()
+    key_binding 'Q', 'Top Left',                mash, -> Window.focused().toTopLeft()
+    key_binding 'A', 'Bottom Left',             mash, -> Window.focused().toBottomLeft()
+    key_binding 'W', 'Top Right',               mash, -> Window.focused().toTopRight()
+    key_binding 'S', 'Bottom Right',            mash, -> Window.focused().toBottomRight()
 
 Toggle maximize for the current window
 
-    key_binding 'space', 'Maximize Window',     mash, -> Window.focusedWindow().toFullScreen()
+    key_binding 'space', 'Maximize Window',     mash, -> Window.focused().toFullScreen()
 
 ## Application config
 
@@ -426,7 +416,7 @@ Setting the grid size
 
 Snap current window or all windows to the grid
 
-    key_binding ';', 'Snap focused to grid',    mash, -> Window.focusedWindow().snapToGrid()
+    key_binding ';', 'Snap focused to grid',    mash, -> Window.focused().snapToGrid()
     key_binding "'", 'Snap all to grid',        mash, -> visible().map (win)-> win.snapToGrid()
 
 Move the current window around the grid
