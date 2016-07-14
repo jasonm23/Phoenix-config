@@ -13,14 +13,18 @@ a lightweight scriptable OS X window manager.
 
 ## Usage
 
-Build Phoenix.app from [kasper/phoenix 2.0 branch](https://github.com/kasper/phoenix/tree/2.0)
+Download .app bundle direct from github https://github.com/kasper/phoenix/releases/tag/2.2.1
+
+### Build from source
+
+Build Phoenix.app from [kasper/phoenix 2.2.1 branch](https://github.com/kasper/phoenix/tree/2.2.1)
 
 You will need XCode command line tools installed.
 
 ```bash
 git clone https://github.com/kasper/phoenix
 cd phoenix
-git checkout 2.0
+git checkout 2.2.1
 xcodebuild clean build
 ```
 
