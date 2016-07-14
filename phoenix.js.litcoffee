@@ -227,15 +227,13 @@ Remember and forget frames
     Window::rememberFrame = -> lastFrames[@uid()] = @frame()
     Window::forgetFrame   = -> delete lastFrames[@uid()]
 
-Toggle left side width
+Toggle window width
 
     Window::togglingWidth = ->
       switch @proportionWidth()
         when 0.8 then 0.5
         when 0.5 then 0.3
         else 0.8
-
-Toggle right side width
 
 Set a window to top / bottom / left / right
 
