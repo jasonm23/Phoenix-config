@@ -365,21 +365,21 @@ Mash is <kbd>Cmd</kbd> + <kbd>Alt/Opt</kbd> + <kbd>Ctrl</kbd> pressed together.
 Move the current window to the top / bottom / left / right half of the screen
 and fill it.
 
-    key_binding 'up',    'Top Half',            mash, -> Window.focused().toTopHalf()
-    key_binding 'down',  'Bottom Half',         mash, -> Window.focused().toBottomHalf()
-    key_binding 'left',  'Left side toggle',    mash, -> Window.focused().toLeftToggle()
-    key_binding 'right', 'Right side toggle',   mash, -> Window.focused().toRightToggle()
+    key_binding 'up',    'Top Half',            mash, -> focused().toTopHalf()
+    key_binding 'down',  'Bottom Half',         mash, -> focused().toBottomHalf()
+    key_binding 'left',  'Left side toggle',    mash, -> focused().toLeftToggle()
+    key_binding 'right', 'Right side toggle',   mash, -> focused().toRightToggle()
 
 Move to the corners of the screen
 
-    key_binding 'Q', 'Top Left',                mash, -> Window.focused().toTopLeft()
-    key_binding 'A', 'Bottom Left',             mash, -> Window.focused().toBottomLeft()
-    key_binding 'W', 'Top Right',               mash, -> Window.focused().toTopRight()
-    key_binding 'S', 'Bottom Right',            mash, -> Window.focused().toBottomRight()
+    key_binding 'Q', 'Top Left',                mash, -> focused().toTopLeft()
+    key_binding 'A', 'Bottom Left',             mash, -> focused().toBottomLeft()
+    key_binding 'W', 'Top Right',               mash, -> focused().toTopRight()
+    key_binding 'S', 'Bottom Right',            mash, -> focused().toBottomRight()
 
 Toggle maximize for the current window
 
-    key_binding 'space', 'Maximize Window',     mash, -> Window.focused().toFullScreen()
+    key_binding 'space', 'Maximize Window',     mash, -> focused().toFullScreen()
 
 ## Application config
 
@@ -418,7 +418,7 @@ Setting the grid size
 
 Snap current window or all windows to the grid
 
-    key_binding ';', 'Snap focused to grid',    mash, -> Window.focused().snapToGrid()
+    key_binding ';', 'Snap focused to grid',    mash, -> focused().snapToGrid()
     key_binding "'", 'Snap all to grid',        mash, -> visible().map (win)-> win.snapToGrid()
 
 Move the current window around the grid
