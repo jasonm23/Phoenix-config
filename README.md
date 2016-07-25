@@ -1,1 +1,1 @@
-# [Go directly to .phoenix.js (literate coffeescript)](phoenix.js.litcoffee)
+# [Go directly to the config:`.phoenix.js.litcoffee`](phoenix.js.litcoffee)
