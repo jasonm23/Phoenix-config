@@ -344,6 +344,29 @@ Focus or start an app with `name`
         App.launch name
       _.each activeWindows, (win) -> win.focus()
 
+### Emacs Gifs
+
+I've started a series called Emacs Gifs, to ensure consistent look &
+feel I'm adding some features which will setup recording environment.
+
+[LiceCap](http://www.cockos.com/licecap/) must be installed on the machine.
+
+    # TODO: Phoenix.notify("") if required apps are not found
+    # TODO: Phoenix.notify("") if background image is not found
+
+Preview, Emacs and LiceCap
+
+    liceCapAndEmacs = ->
+      #
+
+Preview, Emacs, iTerm and LiceCap
+
+    liceCapEmacsAndiTerm = ->
+
+
+iTerm. It's also nice to record it over a set background, which we'll
+keep in `$HOME/emacs_gifs.png` and load into `Preview.app`
+
 ### Binding alias
 
 Alias `Phoenix.bind` as `key_binding`, to make the binding table extra
@@ -390,51 +413,55 @@ Replace these with apps that you want...
     EMACS    = "Emacs"
     TERMINAL = "iTerm2"
     FINDER   = "Finder"
-
-We use an automator app to launch Chrome in remote-debugging-mode (on
-port 9222). You may not like or want this
-
-    CHROME   = "ChromeLauncher"
+    CHROME   = "Google Chrome"
 
 Switch to or lauch apps - fix these up to use whatever Apps you want on speed dial.
 
-    key_binding 'E', 'Launch Emacs',            mash, -> App.focusOrStart EMACS
-    key_binding 'V', 'Launch Vim',              mash, -> App.focusOrStart VIM
-    key_binding 'T', 'Launch iTerm2',           mash, -> App.focusOrStart ITERM
-    key_binding 'C', 'Launch Chrome',           mash, -> App.focusOrStart CHROME
-    key_binding 'F', 'Launch Finder',           mash, -> App.focusOrStart FINDER
+    key_binding 'E', 'Launch Emacs',              mash, -> App.focusOrStart EMACS
+    key_binding 'V', 'Launch Vim',                mash, -> App.focusOrStart VIM
+    key_binding 'T', 'Launch iTerm2',             mash, -> App.focusOrStart ITERM
+    key_binding 'C', 'Launch Chrome',             mash, -> App.focusOrStart CHROME
+    key_binding 'F', 'Launch Finder',             mash, -> App.focusOrStart FINDER
 
 Move window between screens
 
-    key_binding 'N', 'To Next Screen',          mash, -> moveWindowToNextScreen()
-    key_binding 'P', 'To Previous Screen',      mash, -> moveWindowToPreviousScreen()
+    key_binding 'N', 'To Next Screen',            mash, -> moveWindowToNextScreen()
+    key_binding 'P', 'To Previous Screen',        mash, -> moveWindowToPreviousScreen()
 
 Setting the grid size
 
-    key_binding '=', 'Increase Grid Columns',   mash, -> changeGridWidth +1
-    key_binding '-', 'Reduce Grid Columns',     mash, -> changeGridWidth -1
-    key_binding '[', 'Increase Grid Rows',      mash, -> changeGridHeight +1
-    key_binding ']', 'Reduce Grid Rows',        mash, -> changeGridHeight -1
+    key_binding '=', 'Increase Grid Columns',     mash, -> changeGridWidth +1
+    key_binding '-', 'Reduce Grid Columns',       mash, -> changeGridWidth -1
+    key_binding '[', 'Increase Grid Rows',        mash, -> changeGridHeight +1
+    key_binding ']', 'Reduce Grid Rows',          mash, -> changeGridHeight -1
 
 Snap current window or all windows to the grid
 
-    key_binding ';', 'Snap focused to grid',    mash, -> focused().snapToGrid()
-    key_binding "'", 'Snap all to grid',        mash, -> visible().map (win)-> win.snapToGrid()
+    key_binding ';', 'Snap focused to grid',      mash, -> focused().snapToGrid()
+    key_binding "'", 'Snap all to grid',          mash, -> visible().map (win)-> win.snapToGrid()
 
 Move the current window around the grid
 
-    key_binding 'H', 'Move Grid Left',          mash, -> windowLeftOneColumn()
-    key_binding 'J', 'Move Grid Down',          mash, -> windowDownOneRow()
-    key_binding 'K', 'Move Grid Up',            mash, -> windowUpOneRow()
-    key_binding 'L', 'Move Grid Right',         mash, -> windowRightOneColumn()
+    key_binding 'H', 'Move Grid Left',            mash, -> windowLeftOneColumn()
+    key_binding 'J', 'Move Grid Down',            mash, -> windowDownOneRow()
+    key_binding 'K', 'Move Grid Up',              mash, -> windowUpOneRow()
+    key_binding 'L', 'Move Grid Right',           mash, -> windowRightOneColumn()
 
 Size the current window on the grid
 
-    key_binding 'U', 'Window Full Height',      mash, -> windowToFullHeight()
-    key_binding 'I', 'Shrink by One Column',    mash, -> windowShrinkOneGridColumn()
-    key_binding 'O', 'Grow by One Column',      mash, -> windowGrowOneGridColumn()
-    key_binding ',', 'Shrink by One Row',       mash, -> windowShrinkOneGridRow()
-    key_binding '.', 'Grow by One Row',         mash, -> windowGrowOneGridRow()
+    key_binding 'U', 'Window Full Height',        mash, -> windowToFullHeight()
+    key_binding 'I', 'Shrink by One Column',      mash, -> windowShrinkOneGridColumn()
+    key_binding 'O', 'Grow by One Column',        mash, -> windowGrowOneGridColumn()
+    key_binding ',', 'Shrink by One Row',         mash, -> windowShrinkOneGridRow()
+    key_binding '.', 'Grow by One Row',           mash, -> windowGrowOneGridRow()
+
+Setup LiceCap + Emacs for Emacs_Gifs
+
+    key_binding 'home', 'LiceCap & Emacs',        mash, -> liceCapAndEmacs()
+
+Setup LiceCap + Emacs + iTerm for Emacs_Gifs
+
+    key_binding 'help', 'LiceCap, Emacs & iTerm', mash, -> liceCapEmacsAndiTerm()
 
 All done...
 
