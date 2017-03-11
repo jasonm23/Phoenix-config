@@ -103,7 +103,7 @@ couple of command line tools installed, right?)
     focused = -> Window.focused()
     windows = -> Window.windows { visible: true }
 
-    Window::screenRect = -> @screen().visibleFrameInRectangle()
+    Window::screenRect = (screen) -> screen?.flippedVisibleFrame() || @screen().flippedVisibleFrame()
 
     Window::fullGridFrame = -> @calculateGrid y: 0, x: 0, width: 1, height: 1
 
@@ -141,19 +141,20 @@ Get the current grid as `{x:, y:, width:, height:}`
 Set the current grid from an object `{x:, y:, width:, height:}`
 
     Window::setGrid = (grid, screen) ->
+      screen = screen || focused().screen()
       gridWidth = @screenRect().width / GRID_WIDTH
       gridHeight = @screenRect().height / GRID_HEIGHT
 
       @setFrame
-        y: ((grid.y * gridHeight) + @screenRect().y) + MARGIN_Y
-        x: ((grid.x * gridWidth) + @screenRect().x) + MARGIN_X
+        y: ((grid.y * gridHeight) + @screenRect(screen).y) + MARGIN_Y
+        x: ((grid.x * gridWidth) + @screenRect(screen).x) + MARGIN_X
         width: (grid.width * gridWidth) - (MARGIN_X * 2.0)
         height: (grid.height * gridHeight) - (MARGIN_Y * 2.0)
 
 Snap the current window to the grid
 
     Window::snapToGrid = ->
-      @setGrid @getGrid(), @screen() if @isNormal()
+      @setGrid @getGrid() if @isNormal()
 
 Calculate the grid based on the parameters, `x`, `y`, `width`, `height`, (returning an object `{x:,y:,width:,height:}`)
 
@@ -175,7 +176,6 @@ Window to grid
     Window::toGrid = ({x, y, width, height}) ->
       rect = @calculateGrid {x, y, width, height}
       @setFrame rect
-      @
 
 Window top right point
 
@@ -212,11 +212,7 @@ Set a window to full screen
     Window::toFullScreen = ->
       unless _.isEqual @frame(), @fullGridFrame()
         @rememberFrame()
-        @toGrid
-          y: 0
-          x: 0
-          width: 1
-          height: 1
+        @toGrid y: 0, x: 0, width: 1, height: 1
       else if lastFrames[@uid()]
         @setFrame lastFrames[@uid()]
         @forgetFrame()
@@ -253,54 +249,54 @@ Set a window to top / bottom / left / right
 Move the current window to the next / previous screen
 
     moveWindowToNextScreen = ->
-      focused().setGrid focused().getGrid(), focused().screen().nextScreen()
+      focused().setGrid focused().getGrid(), focused().screen().next()
 
     moveWindowToPreviousScreen = ->
-      focused().setGrid focused().getGrid(), focused().screen().previousScreen()
+      focused().setGrid focused().getGrid(), focused().screen().previous()
 
 Move the current window around the grid
 
     windowLeftOneColumn = ->
       frame = focused().getGrid()
       frame.x = Math.max(frame.x - 1, 0)
-      focused().setGrid frame, focused().screen()
+      focused().setGrid frame
 
     windowDownOneRow = ->
       frame = focused().getGrid()
       frame.y = Math.min Math.floor(frame.y + 1), GRID_HEIGHT - 1
-      focused().setGrid frame, focused().screen()
+      focused().setGrid frame
 
     windowUpOneRow = ->
       frame = focused().getGrid()
       frame.y = Math.max Math.floor(frame.y - 1), 0
-      focused().setGrid frame, focused().screen()
+      focused().setGrid frame
 
     windowRightOneColumn = ->
       frame = focused().getGrid()
       frame.x = Math.min(frame.x + 1, GRID_WIDTH - frame.width)
-      focused().setGrid frame, focused().screen()
+      focused().setGrid frame
 
 Resize the current window on the grid
 
     windowGrowOneGridColumn = ->
       frame = focused().getGrid()
       frame.width = Math.min(frame.width + 1, GRID_WIDTH - frame.x)
-      focused().setGrid frame, focused().screen()
+      focused().setGrid frame
 
     windowShrinkOneGridColumn = ->
       frame = focused().getGrid()
       frame.width = Math.max(frame.width - 1, 1)
-      focused().setGrid frame, focused().screen()
+      focused().setGrid frame
 
     windowGrowOneGridRow = ->
       frame = focused().getGrid()
       frame.height = Math.min frame.height + 1, GRID_HEIGHT
-      focused().setGrid frame, focused().screen()
+      focused().setGrid frame
 
     windowShrinkOneGridRow = ->
       frame = focused().getGrid()
       frame.height = Math.max frame.height - 1, 1
-      focused().setGrid frame, focused().screen()
+      focused().setGrid frame
 
 Expand the current window's height to vertically fill the screen
 
@@ -308,7 +304,7 @@ Expand the current window's height to vertically fill the screen
       frame = focused().getGrid()
       frame.y = 0
       frame.height = GRID_HEIGHT
-      focused().setGrid frame, focused().screen()
+      focused().setGrid frame
 
 ### Applications
 
