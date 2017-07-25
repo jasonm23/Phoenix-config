@@ -40,7 +40,7 @@ Install this Phoenix config...
 
 ```bash
 cd
-git clone git@github.com:opsmanager/Phoenix-config
+git clone git@github.com:jasonm23/Phoenix-config
 cd Phoenix-config
 make
 
