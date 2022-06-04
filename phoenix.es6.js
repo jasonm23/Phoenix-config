@@ -83,13 +83,13 @@
   };
 
   // ## Basic Settings
-  MARGIN_X = 1;
+  MARGIN_X = 0;
 
-  MARGIN_Y = 1;
+  MARGIN_Y = 0;
 
-  GRID_WIDTH = 80;
+  GRID_WIDTH = 10;
 
-  GRID_HEIGHT = 64;
+  GRID_HEIGHT = 8;
 
   // ## Methods
 
