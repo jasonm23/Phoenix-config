@@ -476,6 +476,8 @@
 
   // Mash is <kbd>Cmd</kbd> + <kbd>Alt/Opt</kbd> + <kbd>Ctrl</kbd> pressed together.
   mash = 'cmd-alt-ctrl'.split('-');
+  // Smash is Mash + <kbd>shift</kbd>
+  smash = 'cmd-alt-ctrl-shift'.split('-');
 
   // Move the current window to the top / bottom / left / right half of the screen
   // and fill it.
@@ -496,6 +498,10 @@
 
   key_binding('S', 'Bottom Right', mash, () => focused().toBottomRight());
 
+  key_binding('z', 'Right Half', mash, () => focused().toLeftHalf());
+
+  key_binding('x', 'Left Half', mash, () => focused().toRightHalf());
+
   // Toggle maximize for the current window
   key_binding('space', 'Maximize Window', mash, () => focused().toFullScreen());
 
@@ -512,9 +518,22 @@
 
   FINDER = "Finder";
 
-  // We use an automator app to launch Chrome in remote-debugging-mode (on
-  // port 9222). You may not like or want this
-  CHROME = "ChromeLauncher";
+  FIREFOX = "Firefox";
+
+  // Markdown editing : Firefox and Emacs side by side
+  key_binding('M', 'Markdown Editing', mash, () => {
+    App.focusOrStart(FIREFOX);
+    focused().toRightHalf();
+    App.focusOrStart(EMACS);
+    focused().toLeftHalf();
+  });
+
+  key_binding('M', 'Exit Markdown Editing', smash, () => {
+    App.focusOrStart(FIREFOX);
+    focused().toFullScreen();
+    App.focusOrStart(EMACS);
+    focused().toFullScreen();
+  });
 
   // Switch to or lauch apps - fix these up to use whatever Apps you want on speed dial.
   key_binding('E', 'Launch Emacs', mash, () => App.focusOrStart(EMACS));
@@ -523,7 +542,7 @@
 
   key_binding('T', 'Launch iTerm2', mash, () => App.focusOrStart(ITERM));
 
-  key_binding('C', 'Launch Chrome', mash, () => App.focusOrStart(CHROME));
+  key_binding('C', 'Launch Firefox', mash, () => App.focusOrStart(FIREFOX));
 
   key_binding('F', 'Launch Finder', mash, () => App.focusOrStart(FINDER));
 
