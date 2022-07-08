@@ -55,24 +55,10 @@
   // Now is a good time to activate **Open at Login** on the Phoenix OS X
   // menu item, if you like.
 
-  // ### Install CoffeeScript
-
-  // If you don't have CoffeeScript installed, you'll need to install
-  // node/npm (use [`brew`](http://brew.sh))
-
-  // ```shell
-  // brew install node
-  // npm install -g coffee-script
-  // ```
-
-  // I assume you know what you're doing, if not, I wish you luck on your
-  // diligent googling. (let's face it you got this far, you can get a
-  // couple of command line tools installed, right?)
-
   // ... If you need a hint, install `node` and `npm` first.
 
   // ## The Config proper begins here...
-  let CHROME, EMACS, FINDER, GRID_HEIGHT, GRID_WIDTH, ITERM, MARGIN_X, MARGIN_Y, TERMINAL, VIM, changeGridHeight, changeGridWidth, debug, focused, key_binding, keys, lastFrames, mash, moveWindowToNextScreen, moveWindowToPreviousScreen, snapAllToGrid, windowDownOneRow, windowGrowOneGridColumn, windowGrowOneGridRow, windowLeftOneColumn, windowRightOneColumn, windowShrinkOneGridColumn, windowShrinkOneGridRow, windowToFullHeight, windowUpOneRow, windows;
+  let FIREFOX, EMACS, FINDER, GRID_HEIGHT, GRID_WIDTH, ITERM, MARGIN_X, MARGIN_Y, TERMINAL, VIM, changeGridHeight, changeGridWidth, debug, focused, key_binding, keys, lastFrames, mash, moveWindowToNextScreen, moveWindowToPreviousScreen, snapAllToGrid, windowDownOneRow, windowGrowOneGridColumn, windowGrowOneGridRow, windowLeftOneColumn, windowRightOneColumn, windowShrinkOneGridColumn, windowShrinkOneGridRow, windowToFullHeight, windowUpOneRow, windows;
 
   Phoenix.notify("Phoenix config loading");
 
