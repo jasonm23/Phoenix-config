@@ -542,7 +542,7 @@
 
   key_binding('T', 'Launch iTerm2', mash, () => App.focusOrStart(ITERM));
 
-  key_binding('C', 'Launch Firefox', mash, () => App.focusOrStart(FIREFOX));
+  key_binding('B', 'Launch Browser', mash, () => App.focusOrStart(FIREFOX));
 
   key_binding('F', 'Launch Finder', mash, () => App.focusOrStart(FINDER));
 
