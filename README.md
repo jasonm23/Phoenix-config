@@ -1,6 +1,6 @@
 # Phoenix  config
 
-This is a literate (es6) config for [Phoenix](https://github.com/kasper/phoenix/)
+This is a literate (JS) config for [Phoenix](https://github.com/kasper/phoenix/)
 a lightweight scriptable OS X window manager.
 
 Primary feature here is grid based window control and layout. Move and size
