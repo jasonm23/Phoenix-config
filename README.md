@@ -617,10 +617,14 @@ Place Firefox and Emacs windows side-by-side.
 
 ```js @code
 bind_key('M', 'Markdown Editing', mash, () => {
-  App.focusOrStart(FIREFOX)
-  focused().toRightHalf()
-  App.focusOrStart(EMACS)
-  focused().toLeftHalf()
+  [
+    () => App.focusOrStart(FIREFOX),
+    () => focused().toRightHalf(),
+    () => App.focusOrStart(EMACS),
+    () => focused().toLeftHalf(),
+  ].map( (fn, index) => {
+    setTimeout(fn, 250 * (index + 1))
+  })
 })
 
 bind_key('M', 'Exit Markdown Editing', smash, () => {
