@@ -1,4 +1,4 @@
-# Phoenix  config
+# Phoenix config
 
 This is a literate (JS) config for [Phoenix](https://github.com/kasper/phoenix/)
 a lightweight scriptable OS X window manager.
@@ -42,6 +42,16 @@ _.mixin({
   }
 })
 ```
+
+Simplistic rate limited sequence. A list of functions `fns` executed by
+`setTimeout`. Each timeout is multiplied by it's `index` in `fns`.
+
+```js @code
+function rateLimitSequence(fns = [], stepTime = 200){
+  fns.map((fn, index) => setTimeout(fn, stepTime * index))
+}
+```
+
 - - -
 
 ## Window Grid
@@ -617,26 +627,26 @@ Place Firefox and Emacs windows side-by-side.
 
 ```js @code
 bind_key('M', 'Markdown Editing', mash, () => {
-  [
+  rateLimitSequence([
     () => App.focusOrStart(FIREFOX),
     () => focused().toRightHalf(),
     () => App.focusOrStart(EMACS),
     () => focused().toLeftHalf(),
-  ].map( (fn, index) => {
-    setTimeout(fn, 250 * (index + 1))
-  })
+  ])
 })
 
 bind_key('M', 'Exit Markdown Editing', smash, () => {
-  App.focusOrStart(FIREFOX)
-  focused().toFullScreen(false)
-  App.focusOrStart(EMACS)
-  focused().toFullScreen(false)
+  rateLimitSequence([
+    () => App.focusOrStart(FIREFOX),
+    () => focused().toFullScreen(false),
+    () => App.focusOrStart(EMACS),
+    () => focused().toFullScreen(false),
+  ])
 })
 ```
 
 All done...
 
 ```js @code
-Phoenix.notify("Loaded")
+Phoenix.notify("All ok.")
 ```
