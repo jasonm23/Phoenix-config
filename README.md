@@ -1,1 +1,1 @@
-# [Go directly to the config:`.phoenix.es6.js`](phoenix.es6.js)
+# [Go directly to the config:`.phoenix.md`](phoenix.md)
