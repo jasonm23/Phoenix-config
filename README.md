@@ -570,14 +570,14 @@ bind_key('F', 'Launch Finder', mash, () => App.focusOrStart(FINDER))
 
 Move window between screens
 
-``` @code
+```js @code
 bind_key('N', 'To Next Screen', mash, moveWindowToNextScreen)
 bind_key('P', 'To Previous Screen', mash, moveWindowToPreviousScreen)
 ```
 
 Setting the grid size
 
-``` @code
+```js @code
 bind_key('=', 'Increase Grid Columns', mash, () => changeGridWidth(+1))
 bind_key('-', 'Reduce Grid Columns', mash, () => changeGridWidth(-1))
 bind_key('[', 'Increase Grid Rows', mash, () => changeGridHeight(+1))
@@ -586,14 +586,14 @@ bind_key(']', 'Reduce Grid Rows', mash, () => changeGridHeight(-1))
 
 Snap current window or all windows to the grid
 
-``` @code
+```js @code
 bind_key(';', 'Snap focused to grid', mash, () => focused().snapToGrid())
 bind_key("'", 'Snap all to grid', mash, () => visible().map(win => win.snapToGrid()))
 ```
 
 Move the current window around the grid
 
-``` @code
+```js @code
 bind_key('H', 'Move Grid Left', mash, windowLeftOneColumn)
 bind_key('J', 'Move Grid Down', mash, windowDownOneRow)
 bind_key('K', 'Move Grid Up', mash, windowUpOneRow)
@@ -602,7 +602,7 @@ bind_key('L', 'Move Grid Right', mash, windowRightOneColumn)
 
 Size the current window on the grid
 
-``` @code
+```js @code
 bind_key('U', 'Window Full Height', mash, windowToFullHeight)
 bind_key('Y', 'Window Full Height', mash, windowToFullWidth)
 bind_key('I', 'Shrink by One Column', mash, windowShrinkOneGridColumn)
