@@ -14,7 +14,8 @@ git clone git@github.com:jasonm23/Phoenix-config
 cd Phoenix-config
 make
 ```
-## Config Code
+
+## Code
 
 ```js @code
 Phoenix.notify("Phoenix config loading")
@@ -24,6 +25,7 @@ Phoenix.set({
   openAtLogin: false
 })
 ```
+
 Helpers
 
 ```js @code
@@ -41,15 +43,6 @@ _.mixin({
     return _.flatten(_.map(list, iteratee, context))
   }
 })
-```
-
-Simplistic rate limited sequence. A list of functions `fns` executed by
-`setTimeout`. Each timeout is multiplied by it's `index` in `fns`.
-
-```js @code
-function rateLimitSequence(fns = [], stepTime = 200){
-  fns.map((fn, index) => setTimeout(fn, stepTime * index))
-}
 ```
 
 - - -
@@ -70,9 +63,7 @@ Shortcuts for `focused` and `windows`
 ```js @code
 focused = () => Window.focused()
 
-windows = () => Window.windows({
-  visible: true
-})
+windows = () => Window.windows({visible: true})
 
 Window.prototype.screenFrame = function(screen) {
   return (screen != null ? screen.flippedVisibleFrame() : void 0) || this.screen().flippedVisibleFrame()
@@ -438,9 +429,7 @@ has no title bar. Fair warning.
 Find all apps with `name`
 
 ```js @code
-App.allWithName = name => {
-  _.filter(App.all(), app => app.name() === name)
-}
+App.allWithName = name => _.filter(App.all(), a => a.name() === name)
 
 App.byName = name => {
   let app = _.first(App.allWithName(name))
@@ -456,10 +445,7 @@ App.focusOrStart = name => {
   let apps = App.allWithName(name)
   
   if (_.isEmpty(apps)) {
-    Phoenix.notify(`Starting ${name}`)
     App.launch(name)
-  } else {
-    Phoenix.notify(`Switching to ${name}`)
   }
   
   let windows = _.flatmap(apps, x => x.windows())
@@ -627,21 +613,17 @@ Place Firefox and Emacs windows side-by-side.
 
 ```js @code
 bind_key('M', 'Markdown Editing', mash, () => {
-  rateLimitSequence([
-    () => App.focusOrStart(FIREFOX),
-    () => focused().toRightHalf(),
-    () => App.focusOrStart(EMACS),
-    () => focused().toLeftHalf(),
-  ])
+  App.focusOrStart(FIREFOX) 
+  focused().toRightHalf()
+  App.focusOrStart(EMACS)
+  focused().toLeftHalf()
 })
 
 bind_key('M', 'Exit Markdown Editing', smash, () => {
-  rateLimitSequence([
-    () => App.focusOrStart(FIREFOX),
-    () => focused().toFullScreen(false),
-    () => App.focusOrStart(EMACS),
-    () => focused().toFullScreen(false),
-  ])
+  App.focusOrStart(FIREFOX)
+  focused().toFullScreen(false)
+  App.focusOrStart(EMACS)
+  focused().toFullScreen(false)
 })
 ```
 
