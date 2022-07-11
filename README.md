@@ -1,1 +1,1 @@
-# [Go directly to the config:`.phoenix.md`](phoenix.md)
+# [Go directly to the config:`phoenix.md`](phoenix.md)
