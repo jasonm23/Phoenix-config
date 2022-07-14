@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if (( $# != 1 )); then
-    printf "Usage: $(basename $0) <markdown-literate.md>\n\nFilter code blocks found in: <markdown-literate.md>\n\n\`\`\`lang @code\nsomeCodeHere() {...}\n\`\`\`\n\nFor \`\`\`lang @code, lang can be any lowercase alpha string.\n\nCode inside backtick blocks will be sent to stdout.\n\n"
+    printf "Usage: $(basename $0) <markdown-literate.lang.md>\n\nFilter code blocks found in: <markdown-literate.md>\n\n\`\`\`lang @code\nsomeCodeHere() {...}\n\`\`\`\n\nFor \`\`\`lang @code, lang can be any lowercase alpha string.\n\nCode inside backtick blocks will be sent to stdout.\n\n"
 else
     sed -E -n '/^```[a-z]* ?@code/,/^```/ p' < $1 | sed '/^```/ d'
 fi

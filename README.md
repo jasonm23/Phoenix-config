@@ -58,12 +58,25 @@ GRID_WIDTH = 10
 GRID_HEIGHT = 8
 ```
 
-Shortcuts for `focused` and `windows`
+Shortcuts for `focused` and `visible`
 
 ```js @code
 focused = () => Window.focused()
 
-windows = () => Window.windows({visible: true})
+function visible() { 
+  let visibleWindows = Window.all().filter( w => {
+    if (w != undefined) { 
+      return w.isVisible()
+    } else {
+      return false
+    }
+  })
+  debug("All visible windows...")
+  debug(visibleWindows)
+  return visibleWindows
+}
+
+
 
 Window.prototype.screenFrame = function(screen) {
   return (screen != null ? screen.flippedVisibleFrame() : void 0) || this.screen().flippedVisibleFrame()
@@ -77,7 +90,7 @@ Window.prototype.fullGridFrame = function() {
 Snap all windows to grid layout
 
 ```js @code
-snapAllToGrid = () => _.map(visible(), win => win.snapToGrid())
+function snapAllToGrid() { _.map(visible(), win => win.snapToGrid()) }
 ```
 
 Change grid width or height
@@ -96,7 +109,7 @@ changeGridHeight = n => {
 }
 ```
 
-Get the current grid as `rectangle`:
+Get the current window grid as `rectangle`:
 
 ```js
 // rectangle
@@ -105,16 +118,19 @@ Get the current grid as `rectangle`:
 
 ```js @code
 Window.prototype.getGrid = function() {
-  let frame, gridHeight, gridWidth
-  frame = this.frame()
-  gridWidth = this.screenFrame().width / GRID_WIDTH
-  gridHeight = this.screenFrame().height / GRID_HEIGHT
-  return {
+  let frame = this.frame()
+  let gridWidth = this.screenFrame().width / GRID_WIDTH
+  let gridHeight = this.screenFrame().height / GRID_HEIGHT
+  let grid = {
     y: Math.round((frame.y - this.screenFrame().y) / gridHeight),
     x: Math.round((frame.x - this.screenFrame().x) / gridWidth),
     width: Math.max(1, Math.round(frame.width / gridWidth)),
     height: Math.max(1, Math.round(frame.height / gridHeight))
   }
+  debug(this.title())
+  debug("Grid:")
+  debug(grid)
+  return grid
 }
 ```
 
@@ -550,6 +566,7 @@ Toggle maximize for the current window
 
 ```js @code
 bind_key('space', 'Maximize Window', mash, () => focused().toFullScreen())
+bind_key('return', 'Maximize Window', mash, () => focused().toFullScreen())
 ```
 
 Switch to or launch apps - fix these up to use whatever Apps you want on speed dial.
@@ -576,15 +593,15 @@ Setting the grid size
 ```js @code
 bind_key('=', 'Increase Grid Columns', mash, () => changeGridWidth(+1))
 bind_key('-', 'Reduce Grid Columns', mash, () => changeGridWidth(-1))
-bind_key('[', 'Increase Grid Rows', mash, () => changeGridHeight(+1))
-bind_key(']', 'Reduce Grid Rows', mash, () => changeGridHeight(-1))
+bind_key(']', 'Increase Grid Rows', mash, () => changeGridHeight(+1))
+bind_key('[', 'Reduce Grid Rows', mash, () => changeGridHeight(-1))
 ```
 
 Snap current window or all windows to the grid
 
 ```js @code
 bind_key(';', 'Snap focused to grid', mash, () => focused().snapToGrid())
-bind_key("'", 'Snap all to grid', mash, () => visible().map(win => win.snapToGrid()))
+bind_key("'", 'Snap all to grid', mash, function(){ visible().map(win => win.snapToGrid()) })
 ```
 
 Move the current window around the grid
