@@ -64,16 +64,13 @@ Shortcuts for `focused` and `visible`
 focused = () => Window.focused()
 
 function visible() { 
-  let visibleWindows = Window.all().filter( w => {
+  return Window.all().filter( w => {
     if (w != undefined) { 
       return w.isVisible()
     } else {
       return false
     }
   })
-  debug("All visible windows...")
-  debug(visibleWindows)
-  return visibleWindows
 }
 
 Window.prototype.screenFrame = function(screen) {
@@ -571,11 +568,16 @@ Switch to or launch apps - fix these up to use whatever Apps you want on speed d
 
 ```js @code
 bind_key('A', 'Show App Name', smash, showAppName) 
+bind_key('0', 'Show App Name', smash, showAppName) 
 bind_key('E', 'Launch Emacs', mash, () => App.focusOrStart(EMACS))
+bind_key('4', 'Launch Emacs', mash, () => App.focusOrStart(EMACS))
 bind_key('V', 'Launch Vim', mash, () => App.focusOrStart(VIM))
 bind_key('T', 'Launch iTerm2', mash, () => App.focusOrStart(ITERM))
+bind_key('2', 'Launch iTerm2', mash, () => App.focusOrStart(ITERM))
 bind_key('B', 'Launch Browser', mash, () => App.focusOrStart(FIREFOX))
+bind_key('3', 'Launch Browser', mash, () => App.focusOrStart(FIREFOX))
 bind_key('F', 'Launch Finder', mash, () => App.focusOrStart(FINDER))
+bind_key('1', 'Launch Finder', mash, () => App.focusOrStart(FINDER))
 ```
 
 Move window between screens
@@ -608,6 +610,10 @@ bind_key('H', 'Move Grid Left', mash, windowLeftOneColumn)
 bind_key('J', 'Move Grid Down', mash, windowDownOneRow)
 bind_key('K', 'Move Grid Up', mash, windowUpOneRow)
 bind_key('L', 'Move Grid Right', mash, windowRightOneColumn)
+bind_key('6', 'Move Grid Left', mash, windowLeftOneColumn)
+bind_key('7', 'Move Grid Down', mash, windowDownOneRow)
+bind_key('8', 'Move Grid Up', mash, windowUpOneRow)
+bind_key('9', 'Move Grid Right', mash, windowRightOneColumn)
 ```
 
 Size the current window on the grid
