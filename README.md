@@ -6,7 +6,7 @@ a lightweight scriptable OS X window manager.
 Primary feature here is grid based window control and layout. Move and size
 windows around the grid. Resize grid. Snap window or windows to grid.
 
-### Clone and Install
+## Clone and Install
 
 ```bash
 cd
@@ -15,7 +15,9 @@ cd Phoenix-config
 make
 ```
 
-## Code
+# Code
+
+## Helpers
 
 ```js @code
 Phoenix.notify("Phoenix config loading")
@@ -26,12 +28,12 @@ Phoenix.set({
 })
 ```
 
-Helpers
+Logging
 
 ```js @code
-debug = (o, label = "obj: ") => {
-  Phoenix.log(`debug: ${label} =>`)
-  return Phoenix.log(JSON.stringify(o))
+log = (o, label = "obj: ") => {
+  Phoenix.log(`${(new Date()).toISOString()}:: ${label} =>`)
+  Phoenix.log(JSON.stringify(o))
 }
 ```
 
@@ -54,8 +56,8 @@ Initial grid settings
 ```js @code
 MARGIN_X = 0
 MARGIN_Y = 0
-GRID_WIDTH = 10
-GRID_HEIGHT = 8
+GRID_WIDTH = 16 
+GRID_HEIGHT = 9
 ```
 
 Shortcuts for `focused` and `visible`
@@ -94,37 +96,45 @@ Change grid width or height
 changeGridWidth = n => {
   GRID_WIDTH = Math.max(1, GRID_WIDTH + n)
   Phoenix.notify(`grid is ${GRID_WIDTH} tiles wide`)
-  return snapAllToGrid()
+  snapAllToGrid()
+  return GRID_WIDTH
 }
 
 changeGridHeight = n => {
   GRID_HEIGHT = Math.max(1, GRID_HEIGHT + n)
   Phoenix.notify(`grid is ${GRID_HEIGHT} tiles high`)
-  return snapAllToGrid()
+  snapAllToGrid()
+  return GRID_HEIGHT
 }
 ```
 
-Get the current window grid as `rectangle`:
+Get the grid box size
+
+```js @code
+Window.prototype.getBoxSize = function() {
+  return [this.screenFrame().width / GRID_WIDTH, 
+          this.screenFrame().height / GRID_HEIGHT]
+}
+```
+
+Get the current window `grid` as `rect`:
 
 ```js
-// rectangle
-{x: float, y: float, width: float, height: float} 
+// rectangle 
+{x: float, y: float, width: float, height: float}
 ```
 
 ```js @code
 Window.prototype.getGrid = function() {
   let frame = this.frame()
-  let gridWidth = this.screenFrame().width / GRID_WIDTH
-  let gridHeight = this.screenFrame().height / GRID_HEIGHT
+  let [boxHeight, boxWidth] = this.getBoxSize() 
   let grid = {
-    y: Math.round((frame.y - this.screenFrame().y) / gridHeight),
-    x: Math.round((frame.x - this.screenFrame().x) / gridWidth),
-    width: Math.max(1, Math.round(frame.width / gridWidth)),
-    height: Math.max(1, Math.round(frame.height / gridHeight))
+    y: Math.round((frame.y - this.screenFrame().y) / boxHeight),
+    x: Math.round((frame.x - this.screenFrame().x) / boxWidth),
+    width: Math.max(1, Math.round(frame.width / boxWidth)),
+    height: Math.max(1, Math.round(frame.height / boxHeight))
   }
-  debug(this.title())
-  debug("Grid:")
-  debug(grid)
+  log(`Window grid: ${grid}`)
   return grid
 }
 ```
@@ -230,7 +240,7 @@ Window.prototype.info = function() {
 }
 ```
 
-### Window moving and sizing
+## Window moving and sizing
 
 Temporary storage for frames
 
@@ -268,6 +278,7 @@ Window.prototype.forgetFrame = function() {
 }
 ```
 
+<a name="toggling-width"/>
 Toggle window width 80%, 50%, 30%
 
 ```js @code
@@ -283,7 +294,29 @@ Window.prototype.togglingWidth = function() {
 }
 ```
 
-Set a window to top / bottom / left / right
+#### Screen halves
+
+``` text
+┌───────────────────────┐
+│                       │
+│                       │
+│                       │
+├───────────────────────┤
+│                       │
+│                       │
+│                       │
+└───────────────────────┘
+┌───────────┬───────────┐
+│           │           │
+│           │           │
+│           │           │
+│           │           │
+│           │           │
+│           │           │
+│           │           │
+└───────────┴───────────┘
+```
+
 
 ```js @code
 Window.prototype.toTopHalf = function() {
@@ -302,6 +335,41 @@ Window.prototype.toRightHalf = function() {
   return this.toGrid({x: 0.5, y: 0, width: 0.5, height: 1})
 }
 
+```
+
+#### Left/Right Sides with [toggling width](#toggling-width).
+
+``` text
+┌──────┬────────────────┐
+│      │                │
+│      │                │
+│      │                │
+│      │                │
+│      │                │
+│      │                │
+│      │                │
+└──────┴────────────────┘
+┌───────────┬───────────┐
+│           │           │
+│           │           │
+│           │           │
+│           │           │
+│           │           │
+│           │           │
+│           │           │
+└───────────┴───────────┘
+┌────────────────┬──────┐
+│                │      │
+│                │      │
+│                │      │
+│                │      │
+│                │      │
+│                │      │
+│                │      │
+└────────────────┴──────┘
+```
+
+```js @code
 Window.prototype.toLeftToggle = function() {
   return this.toGrid({
     x: 0,
@@ -319,7 +387,51 @@ Window.prototype.toRightToggle = function() {
     height: 1
   })
 }
+```
 
+#### To screen corners
+
+``` text
+┌───────────┬───────────┐
+│           │           │
+│           │           │
+│           │           │
+├───────────┘           │
+│                       │
+│                       │
+│                       │
+└───────────────────────┘
+┌───────────┬───────────┐
+│           │           │
+│           │           │
+│           │           │
+│           └───────────┤
+│                       │
+│                       │
+│                       │
+└───────────────────────┘
+┌───────────────────────┐
+│                       │
+│                       │
+│                       │
+├───────────┐           │
+│           │           │
+│           │           │
+│           │           │
+└───────────┴───────────┘
+┌───────────────────────┐
+│                       │
+│                       │
+│                       │
+│           ┌───────────┤
+│           │           │
+│           │           │
+│           │           │
+└───────────┴───────────┘
+```
+
+
+```js @code
 Window.prototype.toTopRight = function() {
   return this.toGrid({x: 0.5, y: 0, width: 0.5, height: 0.5})
 }
@@ -337,14 +449,58 @@ Window.prototype.toBottomLeft = function() {
 }
 ```
 
-Move the current window to the next / previous screen
+To the center of the screen with a 1 grid border.
 
-```js @code
-moveWindowToNextScreen = () => focused().setGrid(focused().getGrid(), focused().screen().next())
-moveWindowToPreviousScreen = () => focused().setGrid(focused().getGrid(), focused().screen().previous())
+``` text
+┌───────────────────────┐
+│                       │
+│   ┌───────────────┐   │
+│   │               │   │
+│   │               │   │
+│   │               │   │
+│   │               │   │
+│   └───────────────┘   │
+│                       │
+└───────────────────────┘
 ```
 
-Move the current window around the grid
+```js @code
+Window.prototype.toCenterWithBorder = function(border = 1) {
+  let [boxWidth, boxHeight] = this.getBoxSize()
+  let rect
+  if (typeof(border) == "object") {
+    if (Object.keys(border).sort() == "lr tb".split(" ")) {
+      let {tb,lr} = border
+      rect = {
+               x: lr, 
+               y: tb,
+               width: GRID_WIDTH - (lr * 2),
+               width: GRID_HEIGHT - (tb * 2)
+             }
+    }
+    if (Object.keys(border).sort() == "blrt".split("")) {
+      let {t,r,b,l} = border
+      rect = {
+               x: l,
+               y: t,
+               width: GRID_WIDTH - (l + r),
+               width: GRID_HEIGHT - (t + b)
+             }
+    }
+  } else if (typeof(border) == "number") {
+    rect = { 
+             x: border,
+             y: border, 
+             width: GRID_WIDTH - (border * 2), 
+             height: GRID_HEIGHT - (border * 2) 
+           }
+  }
+  
+  this.setGrid(rect)
+} 
+````
+
+### Move the current window around the grid
 
 ```js @code
 windowLeftOneColumn = () => {
@@ -422,7 +578,16 @@ windowToFullWidth = () => {
 }
 ```
 
-### Applications
+## Multi-screen  helpers...
+
+Move the current window to the next / previous screen
+
+```js @code
+moveWindowToNextScreen = () => focused().setGrid(focused().getGrid(), focused().screen().next())
+moveWindowToPreviousScreen = () => focused().setGrid(focused().getGrid(), focused().screen().previous())
+```
+
+## Applications
 
 Select the first window for an app
 
@@ -470,13 +635,12 @@ App.focusOrStart = name => {
 }
 ```
 
-## Applications
+# Applications
 
-Replace these with apps that you want...
+Launch apps
 
 ```js @code
 ITERM = "iTerm2"
-VIM = "MacVim"
 EMACS = "Emacs"
 FINDER = "Finder"
 FIREFOX = "Firefox"
@@ -501,6 +665,9 @@ let showAppName = () => {
   modal.show()
 }
 ```
+
+(It's  pretty cool, but it's clearly a bezel ;)
+
 ### Binding alias
 
 Alias `Phoenix.bind` as `bind_key`, to make the binding table extra
@@ -541,6 +708,12 @@ bind_key('left', 'Left side toggle', mash, () => focused().toLeftToggle())
 bind_key('right', 'Right side toggle', mash, () => focused().toRightToggle())
 ```
 
+Move to the center of the screen with a single grid border
+
+```js @code
+bind_key('C', 'Center with border', mash, () => focused().toCenterWithBorder(1))
+```
+
 Move to the corners of the screen
 
 ```js @code
@@ -567,17 +740,11 @@ bind_key('return', 'Maximize Window', mash, () => focused().toFullScreen())
 Switch to or launch apps - fix these up to use whatever Apps you want on speed dial.
 
 ```js @code
-bind_key('A', 'Show App Name', smash, showAppName) 
-bind_key('0', 'Show App Name', smash, showAppName) 
+bind_key('1', 'Show App Name', mash, showAppName) 
 bind_key('E', 'Launch Emacs', mash, () => App.focusOrStart(EMACS))
-bind_key('4', 'Launch Emacs', mash, () => App.focusOrStart(EMACS))
-bind_key('V', 'Launch Vim', mash, () => App.focusOrStart(VIM))
 bind_key('T', 'Launch iTerm2', mash, () => App.focusOrStart(ITERM))
-bind_key('2', 'Launch iTerm2', mash, () => App.focusOrStart(ITERM))
 bind_key('B', 'Launch Browser', mash, () => App.focusOrStart(FIREFOX))
-bind_key('3', 'Launch Browser', mash, () => App.focusOrStart(FIREFOX))
 bind_key('F', 'Launch Finder', mash, () => App.focusOrStart(FINDER))
-bind_key('1', 'Launch Finder', mash, () => App.focusOrStart(FINDER))
 ```
 
 Move window between screens
