@@ -32,7 +32,7 @@ Phoenix.set({
 Logging
 
 ```js @code
-log = (o, label = "obj: ") => {
+let log = function (o, label = "obj: ") {
   Phoenix.log(`${(new Date()).toISOString()}:: ${label} =>`)
   Phoenix.log(JSON.stringify(o))
 }
@@ -450,7 +450,7 @@ Window.prototype.toBottomLeft = function() {
 }
 ```
 
-To the center of the screen with a 1 grid border.
+To the center of the screen with a grid border.
 
 ``` text
 ┌───────────────────────┐
@@ -468,37 +468,14 @@ To the center of the screen with a 1 grid border.
 ```js @code
 Window.prototype.toCenterWithBorder = function(border = 1) {
   let [boxWidth, boxHeight] = this.getBoxSize()
-  let rect
-  if (typeof(border) == "object") {
-    if (Object.keys(border).sort() == "lr tb".split(" ")) {
-      let {tb,lr} = border
-      rect = {
-               x: lr, 
-               y: tb,
-               width: GRID_WIDTH - (lr * 2),
-               width: GRID_HEIGHT - (tb * 2)
+  let rect = { 
+               x: border,
+               y: border, 
+               width: GRID_WIDTH - (border * 2), 
+               height: GRID_HEIGHT - (border * 2) 
              }
-    }
-    if (Object.keys(border).sort() == "blrt".split("")) {
-      let {t,r,b,l} = border
-      rect = {
-               x: l,
-               y: t,
-               width: GRID_WIDTH - (l + r),
-               width: GRID_HEIGHT - (t + b)
-             }
-    }
-  } else if (typeof(border) == "number") {
-    rect = { 
-             x: border,
-             y: border, 
-             width: GRID_WIDTH - (border * 2), 
-             height: GRID_HEIGHT - (border * 2) 
-           }
-  }
-  
   this.setGrid(rect)
-} 
+}
 ```
 
 ### Move the current window around the grid
@@ -709,7 +686,7 @@ bind_key('left', 'Left side toggle', mash, () => focused().toLeftToggle())
 bind_key('right', 'Right side toggle', mash, () => focused().toRightToggle())
 ```
 
-Move to the center of the screen with a single grid border
+Move to the center of the screen as a square
 
 ```js @code
 bind_key('C', 'Center with border', mash, () => focused().toCenterWithBorder(1))
