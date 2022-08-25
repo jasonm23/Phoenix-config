@@ -498,7 +498,7 @@ Window.prototype.toCenterWithBorder = function(border = 1) {
   
   this.setGrid(rect)
 } 
-````
+```
 
 ### Move the current window around the grid
 
