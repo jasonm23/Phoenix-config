@@ -1,4 +1,5 @@
 # Phoenix config
+### 3.1.1
 
 This is a literate (JS) config for [Phoenix](https://github.com/kasper/phoenix/)
 a lightweight scriptable OS X window manager.
