@@ -25,7 +25,7 @@ Phoenix.notify("Phoenix config loading")
 
 Phoenix.set({
   daemon: false,
-  openAtLogin: false
+  openAtLogin: true
 })
 ```
 
